@@ -13,6 +13,8 @@ const container = document.querySelector("#product-container");
 
 //loop time yay
 first20.forEach(product => {
+console.log(product.title);
+
 //card 
 const item_card = document.createElement("div");
 item_card.classList.add("product-card");
