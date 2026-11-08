@@ -1,3 +1,9 @@
+/*
+COMP 3512
+Assignment 1
+Ethan Law
+*/
+
 body {
     background-color: #FCFFFF;
     font-family: Arial, Helvetica, sans-serif;
@@ -16,6 +22,7 @@ body {
     min-height: 60px;
 }
 
+/* Image thumbnail */
 .product-card img {
     width: 100%;
     height: 300px;
@@ -25,6 +32,7 @@ body {
     border-radius: 8px;
 }
 
+/* Add to cart button */
 .product-card button {
     width: 100%;
     padding: 8px;
@@ -35,8 +43,9 @@ body {
     border-radius: 8px;
 }
 
+/* Order products into a grid */
 #product-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
