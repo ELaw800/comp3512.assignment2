@@ -10,6 +10,15 @@ const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
 
 const container = document.querySelector("#product-container");
+const homeButton = document.querySelector("#home_button");
+const browseButton = document.querySelector("#browse_button");
+const cartButton = document.querySelector("#cart_button");
+const aboutButton = document.querySelector("#cart_button");
+
+const homeView = document.querySelector("#home_view");
+const browseView = document.querySelector("#browse_view");
+const cartView = document.querySelector("#cart_view");
+const aboutView = document.querySelectorAll("about_view");
 
 //loop time yay
 for (const product of first20) {
