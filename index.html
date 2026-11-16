@@ -15,10 +15,58 @@ Ethan Law
 </head>
 
 <body>
-    <h1>Browse</h1>
+    <header>
+        <h1>COMP 3512 Assignment 2</h1>
+    </header>
 
-    <section id="product-container"></section>
+    <nav>
+        <!--Home button-->
+        <button id="home_button">HOME</button>
+
+        <!--Browse button-->
+        <button id="browse_button">BROWSE</button>
+
+        <!--Cart button-->
+        <button id="cart_button">CART</button>
+        
+        <!--About page button-->
+        <button id="about_button">ABOUT</button>
+    </nav>
+
+    <main>
     
+        <article id="home_view">
+            <h2>Home</h2>
+            <p>blah blah blah</p>
+        </article>
+
+        <article id="browse_view" class="hidden">
+            <h2>Browse</h2>
+
+                <section id="product-container"></section>
+        </article>
+
+        <article id="product_view" class="hidden">
+            <h2>Single Product</h2>
+
+        </article>
+
+        <article id="cart_view" class="hidden">
+            <h2>Cart</h2>
+
+        </article>
+
+        <article id="about_view" class="hidden">
+            <h2>About this page</h2>
+
+        </article>
+
+
+
+    </main>
+    
+    <footer>COMP 3512 Assignment 2</footer>
+
     <script type="module" src="script.js"></script>
 
 </body>

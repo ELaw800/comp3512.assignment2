@@ -49,3 +49,8 @@ body {
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
+
+/*hide the different views */
+.hidden {
+    display: none;
+}
