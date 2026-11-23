@@ -17,13 +17,79 @@ const container = document.querySelector("#product-container");
 const homeButton = document.querySelector("#home_button");
 const browseButton = document.querySelector("#browse_button");
 const cartButton = document.querySelector("#cart_button");
-const aboutButton = document.querySelector("#cart_button");
+const aboutButton = document.querySelector("#about_button");
+
+homeButton.addEventListener("click", () => {
+    showHomeView();
+});
+
+browseButton.addEventListener("click", () => {
+    console.log("browse clicked")
+    showBrowseView();
+
+});
+
+cartButton.addEventListener("click", () => {
+    showCartView();
+});
+
+aboutButton.addEventListener("click", () => {
+    showAboutView();
+});
+
+//organizaion for the features
+
+//**************view stuff****************
 
 // Different Views of the nav bar
 const homeView = document.querySelector("#home_view");
 const browseView = document.querySelector("#browse_view");
+const productView = document.querySelector("#product_view");
 const cartView = document.querySelector("#cart_view");
-const aboutView = document.querySelectorAll("about_view");
+const aboutView = document.querySelector("#about_view");
+
+function hideViews() {
+    homeView.classList.add("hidden");
+    browseView.classList.add("hidden");
+    productView.classList.add("hidden");
+    cartView.classList.add("hidden");
+    aboutView.classList.add("hidden");
+}
+
+function showHomeView() {
+    hideViews();
+
+    homeView.classList.remove("hidden");
+}
+
+function showBrowseView() {
+    hideViews();
+
+    browseView.classList.remove("hidden");
+}
+
+function showCartView() {
+    hideViews();
+
+    cartView.classList.remove("hidden");
+}
+
+function showAboutView() {
+    hideViews();
+
+    aboutView.classList.remove("hidden");
+}
+
+function showProductView() {
+    hideViews();
+
+    productView.classList.remove("hidden");
+}
+//browse page
+
+//product page
+
+//cart page
 
 
 //loop time yay
@@ -61,10 +127,6 @@ button.addEventListener("click", () => {
     alert(`${product.id} - ${product.title}`);
 });
 
-/*
-is it fine to add these lines here or would it make more sense for them 
-to be with the code where the elements are actually created? Or does it not matter?
-*/
 item_card.appendChild(image);
 item_card.appendChild(title);
 item_card.appendChild(price);
@@ -72,6 +134,6 @@ item_card.appendChild(button);
 
 }
 
-
+showHomeView();
 
 
