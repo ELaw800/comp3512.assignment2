@@ -71,8 +71,31 @@ function showProductView() {
 }
 
 function displayProduct(product) {
-        singleProductContainer.textContent = product.title;
+        singleProductContainer.replaceChildren();
         showProductView();
+
+        // title
+        const title = document.createElement("h2");
+        title.textContent = product.title;
+
+        //price 
+        const price = document.createElement("p");
+        price.textContent = `$${product.price}`;
+
+        //image
+        const image = document.createElement("img");
+        image.src = product.thumbnail;
+
+        //item description
+        const description = document.createElement("p");
+        description.textContent = product.description;
+
+        //display order
+        singleProductContainer.appendChild(image);
+        singleProductContainer.appendChild(title);
+        singleProductContainer.appendChild(price);
+        singleProductContainer.appendChild(description);
+
 }
 
 //****************Buttons******************
