@@ -1,7 +1,6 @@
 <!--
 COMP 3512
-Assignment 1
-Ethan Law
+Assignment 2
 -->
 
 <!DOCTYPE html>
@@ -29,13 +28,11 @@ Ethan Law
         <!--Cart button-->
         <button id="cart_button">CART</button>
         
-        <!--About page button-->
-        <button id="about_button">ABOUT</button>
     </nav>
 
     <main>
     
-        <article id="home_view">
+        <article id="home_view" class="hidden">
             <h2>Home</h2>
             <p>blah blah blah</p>
         </article>
@@ -49,6 +46,8 @@ Ethan Law
         <article id="product_view" class="hidden">
             <h2>Single Product</h2>
 
+            <section id="single_product_container"></section>
+
         </article>
 
         <article id="cart_view" class="hidden">
@@ -56,8 +55,12 @@ Ethan Law
 
         </article>
 
-        <article id="about_view" class="hidden">
+        <article id="about_popup" class="hidden">
             <h2>About this page</h2>
+
+            <button id="close_about">
+                Close
+            </button>
 
         </article>
 

@@ -1,59 +1,49 @@
 /*
 COMP 3512
-Assignment 1
-Ethan Law
+Assignment 2
 */
 
+// data import
 import data from "./data-minifed.json" with {type: "json"};
-
 const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
 
+//specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
 const container = document.querySelector("#product-container");
 // **************************************
+const singleProductContainer = document.querySelector("#single_product_container");
 
-// Buttons
+//all buttons
 const homeButton = document.querySelector("#home_button");
 const browseButton = document.querySelector("#browse_button");
 const cartButton = document.querySelector("#cart_button");
 const aboutButton = document.querySelector("#about_button");
-
-homeButton.addEventListener("click", () => {
-    showHomeView();
-});
-
-browseButton.addEventListener("click", () => {
-    console.log("browse clicked")
-    showBrowseView();
-
-});
-
-cartButton.addEventListener("click", () => {
-    showCartView();
-});
-
-aboutButton.addEventListener("click", () => {
-    showAboutView();
-});
-
-//organizaion for the features
-
-//**************view stuff****************
 
 // Different Views of the nav bar
 const homeView = document.querySelector("#home_view");
 const browseView = document.querySelector("#browse_view");
 const productView = document.querySelector("#product_view");
 const cartView = document.querySelector("#cart_view");
-const aboutView = document.querySelector("#about_view");
+
+const aboutPopup = document.querySelector("#about_popup")
+const closeAbout = document.querySelector("#close_about")
+
+//organizaion for the features
+//1. views
+//2. buttons
+//3. browse page
+//4. individual product page
+//5. shopping cart page
+//6. about popup
+
+//**************view stuff****************
 
 function hideViews() {
     homeView.classList.add("hidden");
     browseView.classList.add("hidden");
     productView.classList.add("hidden");
     cartView.classList.add("hidden");
-    aboutView.classList.add("hidden");
 }
 
 function showHomeView() {
@@ -74,17 +64,36 @@ function showCartView() {
     cartView.classList.remove("hidden");
 }
 
-function showAboutView() {
-    hideViews();
-
-    aboutView.classList.remove("hidden");
-}
-
 function showProductView() {
     hideViews();
 
     productView.classList.remove("hidden");
 }
+
+function displayProduct(product) {
+        singleProductContainer.textContent = product.title;
+        showProductView();
+}
+
+//****************Buttons******************
+
+homeButton.addEventListener("click", () => {
+    showHomeView();
+});
+
+browseButton.addEventListener("click", () => {
+    showBrowseView();
+});
+
+cartButton.addEventListener("click", () => {
+    showCartView();
+});
+/*
+aboutButton.addEventListener("click", () => {
+    //dont forget about the about popup
+});
+*/
+
 //browse page
 
 //product page
@@ -115,7 +124,7 @@ image.src = product.thumbnail;
 
 //Display the product id when the thumbnail is clicked
 image.addEventListener("click", () => {
-    alert(product.id);
+    displayProduct(product);
 });
 
 //Add to cart button
@@ -135,5 +144,3 @@ item_card.appendChild(button);
 }
 
 showHomeView();
-
-
