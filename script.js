@@ -3,18 +3,24 @@ COMP 3512
 Assignment 2
 */
 
-// data import
+//all data
 import data from "./data-minifed.json" with {type: "json"};
 const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
+const cart = [];
 
 //specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
 const container = document.querySelector("#product-container");
 // **************************************
+
+//single product accessed through the browse page
 const singleProductContainer = document.querySelector("#single_product_container");
 
-//all buttons
+//shopping cart
+const cartContainer = document.querySelector("#cart_container");
+
+//Navigation buttons
 const homeButton = document.querySelector("#home_button");
 const browseButton = document.querySelector("#browse_button");
 const cartButton = document.querySelector("#cart_button");
@@ -37,7 +43,7 @@ const closeAbout = document.querySelector("#close_about")
 //5. shopping cart page
 //6. about popup
 
-//**************view stuff****************
+//************** view stuff ****************
 
 function hideViews() {
     homeView.classList.add("hidden");
@@ -90,15 +96,24 @@ function displayProduct(product) {
         const description = document.createElement("p");
         description.textContent = product.description;
 
+        //add to cart button
+        const addToCartButton = document.createElement("button");
+        addToCartButton.textContent = "Add to Cart";
+
+        addToCartButton.addEventListener("click", () => {
+        alert(product.title);
+        });
+
         //display order
         singleProductContainer.appendChild(image);
         singleProductContainer.appendChild(title);
         singleProductContainer.appendChild(price);
         singleProductContainer.appendChild(description);
+        singleProductContainer.appendChild(addToCartButton);
 
 }
 
-//****************Buttons******************
+//**************** Buttons ******************
 
 homeButton.addEventListener("click", () => {
     showHomeView();
@@ -121,7 +136,32 @@ aboutButton.addEventListener("click", () => {
 
 //product page
 
-//cart page
+//************* cart page ****************
+function addToCart(product) {
+    cart.push(product);
+    displayCart();
+    console.log(cart);
+}
+
+function displayCart() {
+    cartContainer.replaceChildren();
+
+    for (const product of cart) {
+        const item = document.createElement("div");
+        item.classList.add("cart-item");
+
+        const title = document.createElement("p");
+        title.textContent = product.title;
+
+        const price = document.createElement("p");
+        price.textContent = `$${product.price}`;
+
+        item.appendChild(title);
+        item.appendChild(price);
+
+        cartContainer.appendChild(item);
+    }
+}
 
 
 //loop time yay
@@ -156,7 +196,7 @@ button.textContent = "Add to cart";
 
 //Display the product id and the title when the thumbnail is clicked
 button.addEventListener("click", () => {
-    alert(`${product.id} - ${product.title}`);
+    addToCart(product);
 });
 
 item_card.appendChild(image);
