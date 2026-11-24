@@ -19,8 +19,14 @@ const singleProductContainer = document.querySelector("#single_product_container
 
 //shopping cart
 const cartContainer = document.querySelector("#cart_container");
-const cartCount = document.querySelectorAll("#cart_count");
+const cartCount = document.querySelector("#cart_count");
 const cartTotal = document.querySelector("#cart_total")
+
+const merchandiseTotal = document.querySelector("#merchandise_total");
+
+const shippingMethod = document.querySelector("#shipping_method");
+const shippingDestination = document.querySelector("#shipping_destination");
+const shippingTotal = document.querySelector("#shipping_total");
 
 //Navigation buttons
 const homeButton = document.querySelector("#home_button");
@@ -88,9 +94,6 @@ function updateStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function removeStorage() { 
-    localStorage.removeItem("cart");
-}
 
 //************** Individual Product ****************
 
@@ -119,7 +122,7 @@ function displayProduct(product) {
         addToCartButton.textContent = "Add to Cart";
 
         addToCartButton.addEventListener("click", () => {
-        alert(product.title);
+            addToCart(product);
         });
 
         //display order
@@ -149,6 +152,15 @@ aboutButton.addEventListener("click", () => {
     //dont forget about the about popup
 });
 */
+
+shippingMethod.addEventListener("change", () => {
+    displayCart();
+});
+
+shippingDestination.addEventListener("change", () => {
+    displayCart();
+});
+
 
 //browse page
 
@@ -231,17 +243,23 @@ function displayCart() {
         imageSection.classList.add("cart_image");
         titleSection.classList.add("cart_title");
         priceSection.classList.add("cart_price");
-        quantity.classList.add("cart_quantity");
+        quantitySection.classList.add("cart_quantity");
         subtotalSection.classList.add("cart_subtotal");
 
         cartContainer.appendChild(cartItem);
 
         totalItems += item.quantity;
         totalPrice += item.product.price * item.quantity;
+
     }
 
+    const shippingCost = calculateShipping(totalPrice);
+    const finalTotal = totalPrice + shippingCost;
+
     cartCount.textContent = `Total Items: ${totalItems}`;
-    cartTotal.textContent = `Total: $${totalPrice.toFixed(2)}`;
+    cartTotal.textContent = `Total: $${finalTotal.toFixed(2)}`;
+    shippingTotal.textContent = `Shipping: $${shippingCost.toFixed(2)}`;
+    merchandiseTotal.textContent = `Merchandise: $${totalPrice.toFixed(2)}`;
 }
 
 function deleteCartItem(event) {
@@ -253,6 +271,52 @@ function deleteCartItem(event) {
     displayCart();
 }
 
+//shipping
+function calculateShipping(merchandiseTotal) {
+    console.log(shippingMethod.value);
+    console.log(shippingDestination.value);
+
+    if (merchandiseTotal > 500) {
+        return 0;
+    }
+
+    const method = shippingMethod.value;
+    const destination = shippingDestination.value;
+
+    if (method === "standard") {
+        if (destination === "canada") {
+            return 10;
+        }
+
+        if (destination === "usa") {
+            return 15;
+        }
+
+        return 20; //standard international 
+    }
+
+    if (method === "express") {
+        if (destination === "canada") {
+            return 25;
+        }
+
+        if (destination === "usa") {
+            return 25;
+        }
+
+        return 30; // express international
+    }
+
+    if (destination === "canada") { //prio canada
+        return 35;
+    }
+
+    if (destination === "usa") { //prio usa
+        return 50;
+    }
+
+    return 50; //prio international
+}
 
 //loop time yay
 for (const product of first20) {
