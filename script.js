@@ -7,7 +7,7 @@ Assignment 2
 import data from "./data-minifed.json" with {type: "json"};
 const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
-const cart = [];
+let cart = [];
 
 //specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
@@ -39,11 +39,12 @@ const closeAbout = document.querySelector("#close_about")
 
 //organizaion for the features
 //1. views
-//2. buttons
-//3. browse page
-//4. individual product page
-//5. shopping cart page
-//6. about popup
+//2. local storage
+//3. buttons
+//4. browse page
+//5. individual product page
+//6. shopping cart page
+//7. about popup
 
 //************** view stuff ****************
 
@@ -77,6 +78,21 @@ function showProductView() {
 
     productView.classList.remove("hidden");
 }
+
+//******************* local storage *****************
+function retrieveStorage() {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function updateStorage() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function removeStorage() {
+    localStorage.removeItem("cart");
+}
+
+//************** Individual Product ****************
 
 function displayProduct(product) {
         singleProductContainer.replaceChildren();
@@ -115,7 +131,7 @@ function displayProduct(product) {
 
 }
 
-//**************** Buttons ******************
+//**************** Nav Buttons ******************
 
 homeButton.addEventListener("click", () => {
     showHomeView();
@@ -135,8 +151,6 @@ aboutButton.addEventListener("click", () => {
 */
 
 //browse page
-
-//product page
 
 //************* cart page ****************
 function addToCart(product) { //this function and displayCart are based on the code from lab9 test 03.
@@ -158,7 +172,7 @@ function addToCart(product) { //this function and displayCart are based on the c
         
         cart.push(newItem);
     }
-
+    updateStorage();
     displayCart();
 }
 
@@ -234,4 +248,6 @@ item_card.appendChild(button);
 
 }
 
+cart = retrieveStorage();
+displayCart();
 showHomeView();
