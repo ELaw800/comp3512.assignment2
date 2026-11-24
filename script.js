@@ -19,6 +19,8 @@ const singleProductContainer = document.querySelector("#single_product_container
 
 //shopping cart
 const cartContainer = document.querySelector("#cart_container");
+const cartCount = document.querySelectorAll("#cart_count");
+const cartTotal = document.querySelector("#cart_total")
 
 //Navigation buttons
 const homeButton = document.querySelector("#home_button");
@@ -137,30 +139,56 @@ aboutButton.addEventListener("click", () => {
 //product page
 
 //************* cart page ****************
-function addToCart(product) {
-    cart.push(product);
+function addToCart(product) { //this function and displayCart are based on the code from lab9 test 03.
+    let existingItem = null;
+
+    for (const item of cart) {
+        if (item.product.id === product.id) {
+            existingItem = item;
+        }
+    }
+
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        const newItem = {
+            product: product,
+            quantity: 1
+        };
+        
+        cart.push(newItem);
+    }
+
     displayCart();
-    console.log(cart);
 }
 
 function displayCart() {
     cartContainer.replaceChildren();
 
-    for (const product of cart) {
-        const item = document.createElement("div");
-        item.classList.add("cart-item");
+    let totalItems = 0;
+    let totalPrice = 0;
+
+    for (const item of cart) {
+        const cartItem = document.createElement("div");
+        cartItem.classList.add("cart-item");
 
         const title = document.createElement("p");
-        title.textContent = product.title;
+        title.textContent = `${item.product.title} x ${item.quantity}`;
 
         const price = document.createElement("p");
-        price.textContent = `$${product.price}`;
+        price.textContent = `$${(item.product.price * item.quantity).toFixed(2)}`;
 
-        item.appendChild(title);
-        item.appendChild(price);
+        cartItem.appendChild(title);
+        cartItem.appendChild(price);
 
-        cartContainer.appendChild(item);
+        cartContainer.appendChild(cartItem);
+
+        totalItems += item.quantity;
+        totalPrice += item.product.price * item.quantity;
     }
+
+    cartCount.textContent = `Items: ${totalItems}`;
+    cartTotal.textContent = `Total: $${totalPrice.toFixed(2)}`;
 }
 
 
