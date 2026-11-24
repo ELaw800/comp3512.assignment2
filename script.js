@@ -88,7 +88,7 @@ function updateStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-function removeStorage() {
+function removeStorage() { 
     localStorage.removeItem("cart");
 }
 
@@ -186,14 +186,26 @@ function displayCart() {
         const cartItem = document.createElement("div");
         cartItem.classList.add("cart-item");
 
-        const title = document.createElement("p");
-        title.textContent = `${item.product.title} x ${item.quantity}`;
+        const title = document.createElement("p"); //item name
+        title.textContent = item.product.title;
 
-        const price = document.createElement("p");
-        price.textContent = `$${(item.product.price * item.quantity).toFixed(2)}`;
+        const price = document.createElement("p"); //price per item
+        price.textContent = `Price: $${(item.product.price)}`;
 
+        const quantity = document.createElement("p"); //quantity of item
+        quantity.textContent = `Quantity: ${item.quantity}`;
+
+        const subtotal = document.createElement("p"); //subtotal of items
+        subtotal.textContent = `Subtotal: $${(item.product.price * item.quantity).toFixed(2)}`;
+
+        const image = document.createElement("img"); //item thumbnail
+        image.src = item.product.thumbnail;
+
+        cartItem.appendChild(image);
         cartItem.appendChild(title);
         cartItem.appendChild(price);
+        cartItem.appendChild(quantity);
+        cartItem.appendChild(subtotal);
 
         cartContainer.appendChild(cartItem);
 
