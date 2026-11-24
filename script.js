@@ -21,12 +21,15 @@ const singleProductContainer = document.querySelector("#single_product_container
 const cartContainer = document.querySelector("#cart_container");
 const cartCount = document.querySelector("#cart_count");
 const cartTotal = document.querySelector("#cart_total")
-
 const merchandiseTotal = document.querySelector("#merchandise_total");
+const shippingTotal = document.querySelector("#shipping_total");
+const taxTotal = document.querySelector("#tax_total");
 
 const shippingMethod = document.querySelector("#shipping_method");
 const shippingDestination = document.querySelector("#shipping_destination");
-const shippingTotal = document.querySelector("#shipping_total");
+
+const checkoutButton = document.querySelector("#checkout_button");
+
 
 //Navigation buttons
 const homeButton = document.querySelector("#home_button");
@@ -46,7 +49,8 @@ const closeAbout = document.querySelector("#close_about")
 //organizaion for the features
 //1. views
 //2. local storage
-//3. buttons
+//3. nav buttons
+//4. event listeners
 //4. browse page
 //5. individual product page
 //6. shopping cart page
@@ -153,6 +157,8 @@ aboutButton.addEventListener("click", () => {
 });
 */
 
+
+//************ event listeners *********
 shippingMethod.addEventListener("change", () => {
     displayCart();
 });
@@ -161,6 +167,9 @@ shippingDestination.addEventListener("change", () => {
     displayCart();
 });
 
+checkoutButton.addEventListener("click", () => {
+    checkout();
+});
 
 //browse page
 
@@ -254,12 +263,14 @@ function displayCart() {
     }
 
     const shippingCost = calculateShipping(totalPrice);
-    const finalTotal = totalPrice + shippingCost;
+    const tax = calculateTax(totalPrice, shippingCost);
+    const finalTotal = totalPrice + shippingCost + tax;
 
     cartCount.textContent = `Total Items: ${totalItems}`;
-    cartTotal.textContent = `Total: $${finalTotal.toFixed(2)}`;
-    shippingTotal.textContent = `Shipping: $${shippingCost.toFixed(2)}`;
     merchandiseTotal.textContent = `Merchandise: $${totalPrice.toFixed(2)}`;
+    shippingTotal.textContent = `Shipping: $${shippingCost.toFixed(2)}`;
+    taxTotal.textContent = `Tax: $${tax.toFixed(2)}`;
+    cartTotal.textContent = `Total: $${finalTotal.toFixed(2)}`;
 }
 
 function deleteCartItem(event) {
@@ -318,6 +329,39 @@ function calculateShipping(merchandiseTotal) {
     return 50; //prio international
 }
 
+//taxes :(
+function calculateTax(merchandiseTotal, shippingCost) { 
+    if (shippingDestination.value === "canada") { //add tax only if the shipping destrination is canada
+        return (merchandiseTotal + shippingCost) * 0.05;
+    }
+
+    return 0;
+}
+
+//checkout time
+function checkout() {
+    alert("Checkout complete. Purchase successful!")
+
+    cart =[];
+
+    updateStorage();
+    displayCart();
+    showHomeView();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //loop time yay
 for (const product of first20) {
 console.log(product.title);
@@ -359,6 +403,18 @@ item_card.appendChild(price);
 item_card.appendChild(button);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 cart = retrieveStorage();
 displayCart();
