@@ -4,10 +4,13 @@ Assignment 2
 */
 
 //all data
+/*
 import data from "./data-minifed.json" with {type: "json"};
 const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
+*/
 let cart = [];
+let products = [];
 
 //specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
@@ -97,10 +100,14 @@ function updateStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+function retrieveProductStorage() {
+    return JSON.parse(localStorage.getItem("products")) || [];
+}
+
 
 //************** Individual Product ****************
 
-function displayProduct(product) {
+function displayIndividualProduct(product) {
         singleProductContainer.replaceChildren();
         showProductView();
 
@@ -388,7 +395,7 @@ image.src = product.thumbnail;
 
 //Display the product id when the thumbnail is clicked
 image.addEventListener("click", () => {
-    displayProduct(product);
+    displayIndividualProduct(product);
 });
 
 //Add to cart button
