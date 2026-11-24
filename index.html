@@ -27,30 +27,33 @@ Assignment 2
 
         <!--Cart button-->
         <button id="cart_button">CART</button>
+
+        <!--About button-->
+        <button id="about_button">ABOUT</button>
         
     </nav>
 
     <main>
     
-        <article id="home_view" class="hidden">
+        <article id="home_view" class="hidden"> <!--View #1-->
             <h2>Home</h2>
             <p>blah blah blah</p>
         </article>
 
-        <article id="browse_view" class="hidden">
+        <article id="browse_view" class="hidden"> <!--View #2-->
             <h2>Browse</h2>
 
                 <section id="product-container"></section>
         </article>
 
-        <article id="product_view" class="hidden">
+        <article id="product_view" class="hidden"> <!--View #3-->
             <h2>Single Product</h2>
 
             <section id="single_product_container"></section>
 
         </article>
 
-        <article id="cart_view" class="hidden">
+        <article id="cart_view" class="hidden"> <!--View #4-->
             <h2>Cart</h2>
 
             <section id="cart_container"></section>
@@ -89,15 +92,18 @@ Assignment 2
 
         </article>
 
-        <article id="about_popup" class="hidden">
+        <dialog id="about_popup"> <!--View #5-->
             <h2>About this page</h2>
+            <section>
+                <h3>Stuff</h3>
+                <p>more stuff</p>
+            </section>
 
             <button id="close_about">
                 Close
             </button>
 
-        </article>
-
+        </dialog>
 
 
     </main>

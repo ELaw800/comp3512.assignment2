@@ -30,7 +30,6 @@ const shippingDestination = document.querySelector("#shipping_destination");
 
 const checkoutButton = document.querySelector("#checkout_button");
 
-
 //Navigation buttons
 const homeButton = document.querySelector("#home_button");
 const browseButton = document.querySelector("#browse_button");
@@ -151,11 +150,15 @@ browseButton.addEventListener("click", () => {
 cartButton.addEventListener("click", () => {
     showCartView();
 });
-/*
+
 aboutButton.addEventListener("click", () => {
-    //dont forget about the about popup
+    aboutPopup.showModal();
 });
-*/
+
+closeAbout.addEventListener("click", () => {
+    aboutPopup.close();
+})
+
 
 
 //************ event listeners *********
