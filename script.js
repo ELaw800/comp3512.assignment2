@@ -153,7 +153,7 @@ aboutButton.addEventListener("click", () => {
 //browse page
 
 //************* cart page ****************
-function addToCart(product) { //this function and displayCart are based on the code from lab9 test 03.
+function addToCart(product) { //this function and displayCart are based on the code from labs
     let existingItem = null;
 
     for (const item of cart) {
@@ -183,6 +183,13 @@ function displayCart() {
     let totalPrice = 0;
 
     for (const item of cart) {
+
+        const imageSection = document.createElement("div");
+        const titleSection = document.createElement("div");
+        const priceSection = document.createElement("div");
+        const quantitySection = document.createElement("div");
+        const subtotalSection = document.createElement("div");
+
         const cartItem = document.createElement("div");
         cartItem.classList.add("cart-item");
 
@@ -201,11 +208,31 @@ function displayCart() {
         const image = document.createElement("img"); //item thumbnail
         image.src = item.product.thumbnail;
 
-        cartItem.appendChild(image);
-        cartItem.appendChild(title);
-        cartItem.appendChild(price);
-        cartItem.appendChild(quantity);
-        cartItem.appendChild(subtotal);
+        // Delete button 
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "DELETE"
+        deleteButton.dataset.id = item.product.id;
+
+        deleteButton.addEventListener("click", deleteCartItem);
+
+        imageSection.appendChild(image);
+        titleSection.appendChild(title);
+        priceSection.appendChild(price);
+        quantitySection.appendChild(quantity);
+        subtotalSection.appendChild(subtotal);
+
+        cartItem.appendChild(deleteButton);
+        cartItem.appendChild(imageSection);
+        cartItem.appendChild(titleSection);
+        cartItem.appendChild(priceSection);
+        cartItem.appendChild(quantitySection);
+        cartItem.appendChild(subtotalSection);
+
+        imageSection.classList.add("cart_image");
+        titleSection.classList.add("cart_title");
+        priceSection.classList.add("cart_price");
+        quantity.classList.add("cart_quantity");
+        subtotalSection.classList.add("cart_subtotal");
 
         cartContainer.appendChild(cartItem);
 
@@ -213,8 +240,17 @@ function displayCart() {
         totalPrice += item.product.price * item.quantity;
     }
 
-    cartCount.textContent = `Items: ${totalItems}`;
+    cartCount.textContent = `Total Items: ${totalItems}`;
     cartTotal.textContent = `Total: $${totalPrice.toFixed(2)}`;
+}
+
+function deleteCartItem(event) {
+    const id = Number(event.currentTarget.dataset.id);
+
+    cart = cart.filter(item => item.product.id !== id);
+
+    updateStorage();
+    displayCart();
 }
 
 

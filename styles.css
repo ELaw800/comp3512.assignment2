@@ -57,9 +57,13 @@ body {
 
 /* items in cart */
 .cart-item {
-    border: 1px solid black;
+    display: grid;
+    grid-template-columns: 50px 120px 1fr 120px 120px 120px;
+    align-items: center;
+
+    gap: 15px;
+ 
     padding: 10px;
-    margin-bottom: 10px;
     background-color: white;
 }
 
