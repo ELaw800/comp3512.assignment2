@@ -43,6 +43,12 @@ const cartView = document.querySelector("#cart_view");
 const aboutPopup = document.querySelector("#about_popup")
 const closeAbout = document.querySelector("#close_about")
 
+// Browse page 
+const nameFilter = document.querySelector("#name_filter");
+const categoryFilter = document.querySelector("#category_filter");
+const ratingFilter = document.querySelector("#rating_filter");
+const priceFilter = document.querySelector("#price_filter");
+
 //organizaion for the features
 //1. views
 //2. local storage
@@ -135,6 +141,47 @@ async function loadAllProducts() {
     }
 }
 
+//************ event listeners *************
+
+//****** Nav Buttons **********
+
+homeButton.addEventListener("click", () => {
+    showHomeView();
+});
+
+browseButton.addEventListener("click", () => {
+    showBrowseView();
+});
+
+cartButton.addEventListener("click", () => {
+    showCartView();
+});
+
+aboutButton.addEventListener("click", () => {
+    aboutPopup.showModal();
+});
+
+//******* other *******
+
+closeAbout.addEventListener("click", () => {
+    aboutPopup.close();
+})
+
+shippingMethod.addEventListener("change", () => {
+    displayCart();
+});
+
+shippingDestination.addEventListener("change", () => {
+    displayCart();
+});
+
+checkoutButton.addEventListener("click", () => {
+    checkout();
+});
+
+//***** filters *****
+nameFilter.addEventListener("input", filterByName);
+
 //************** Individual Product ****************
 
 function displayIndividualProduct(product) {
@@ -173,43 +220,6 @@ function displayIndividualProduct(product) {
         singleProductContainer.appendChild(addToCartButton);
 
 }
-
-//**************** Nav Buttons ******************
-
-homeButton.addEventListener("click", () => {
-    showHomeView();
-});
-
-browseButton.addEventListener("click", () => {
-    showBrowseView();
-});
-
-cartButton.addEventListener("click", () => {
-    showCartView();
-});
-
-aboutButton.addEventListener("click", () => {
-    aboutPopup.showModal();
-});
-
-closeAbout.addEventListener("click", () => {
-    aboutPopup.close();
-})
-
-
-
-//************ event listeners *********
-shippingMethod.addEventListener("change", () => {
-    displayCart();
-});
-
-shippingDestination.addEventListener("change", () => {
-    displayCart();
-});
-
-checkoutButton.addEventListener("click", () => {
-    checkout();
-});
 
 //******************** browse page********************
 
@@ -259,6 +269,30 @@ function displayProducts(products) {
     }
 }
 
+/*features that need to be part of the browse page 
+- Different ways of filtering:
+    - by name
+    - by category
+    - by rating
+    - by price
+- Different ways to change sort order: (default is product name)
+    - name (a-z)
+    - price 
+    - category
+- Clear all filters button
+*/
+
+function filterByName() {
+    const searchText = nameFilter.value.toLowerCase();
+
+    const filteredProducts = products.filter(product => product.title.toLowerCase().includes(searchText));
+
+    displayProducts(filteredProducts);
+}
+
+function filterbyCategory() {
+    
+}
 
 //************* cart page ****************
 function addToCart(product) { //this function and displayCart are based on the code from labs
