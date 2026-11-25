@@ -105,6 +105,7 @@ function updateProductsToStorage() {
     localStorage.setItem("products", JSON.stringify(products));
 }
 
+//load all of the products from the url rather than directly from the json
 async function loadAllProducts() {
     console.log("getting products");
     products = retrieveProductFromStorage();
@@ -439,7 +440,7 @@ function checkout() {
 
 
 
-
+// make sure everything is loaded 
 cart = retrieveStorage();
 displayCart();
 loadAllProducts();
