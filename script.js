@@ -3,15 +3,9 @@ COMP 3512
 Assignment 2
 */
 
-//all data
-
-import data from "./data-minifed.json" with {type: "json"};
-/*
-const products = data.products;
-const first20 = products.slice(0, 20); //only take the first 20 products from the json
-*/
+//data arrays
 let cart = [];
-let allProducts = [];
+let products = [];
 
 //specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
@@ -103,11 +97,18 @@ function updateStorage() {
 
 // ************** local all product storage ***************
 
-function retrieveProductStorage() {
-    return JSON.parse(localStorage.getItem("allProducts")) || [];
+function retrieveProductFromStorage() {
+    return JSON.parse(localStorage.getItem("products")) || [];
 }
 
-function loadAllProducts() {
+function updateProductsToStorage() {
+    localStorage.setItem("products", JSON.stringify(products));
+}
+
+async function loadAllProducts() {
+    console.log("getting products");
+    products = retrieveProductFromStorage();
+
     if (products.length > 0) {
         displayProducts(products);
 
@@ -115,14 +116,21 @@ function loadAllProducts() {
     }
     try {
         const response = await fetch("https://dummyjson.com/products?limit=100");
-        const data = await response.json(); 
 
-        products = data.products;
+        if (response.ok) {
+            const data = await response.json(); 
 
-        displayProducts(products);
+            products = data.products;
+            console.log(products);
+            updateProductsToStorage();
+
+            displayProducts(products);
+        } else {
+            console.error(error);
+        }
     }
     catch {
-        console.log("There is an error somewhere");
+        console.error(error);
     }
 }
 
@@ -202,7 +210,54 @@ checkoutButton.addEventListener("click", () => {
     checkout();
 });
 
-//browse page
+//******************** browse page********************
+
+// function to display all of the products
+function displayProducts(products) {
+
+    container.replaceChildren();
+
+    for (const product of products) {
+
+//Individual Product Card
+    const item_card = document.createElement("div");
+    item_card.classList.add("product-card");
+    container.appendChild(item_card);
+
+//Product Title
+    const title = document.createElement("h2");
+    title.textContent = product.title;
+
+//Product Price
+    const price = document.createElement("p");
+    price.textContent = `$${product.price}`;
+
+//Product Image
+    const image = document.createElement("img");
+    image.src = product.thumbnail;
+
+//Display the product id when the thumbnail is clicked
+    image.addEventListener("click", () => {
+        displayIndividualProduct(product);
+    });
+
+//Add to cart button
+    const button = document.createElement("button");
+    button.textContent = "Add to cart";
+
+//Display the product id and the title when the thumbnail is clicked
+    button.addEventListener("click", () => {
+        addToCart(product);
+    });
+
+    item_card.appendChild(image);
+    item_card.appendChild(title);
+    item_card.appendChild(price);
+    item_card.appendChild(button);
+
+    }
+}
+
 
 //************* cart page ****************
 function addToCart(product) { //this function and displayCart are based on the code from labs
@@ -315,9 +370,6 @@ function deleteCartItem(e) {
 
 //shipping
 function calculateShipping(merchandiseTotal) {
-    console.log(shippingMethod.value);
-    console.log(shippingDestination.value);
-
     if (merchandiseTotal > 500) {
         return 0;
     }
@@ -388,74 +440,7 @@ function checkout() {
 
 
 
-
-
-
-
-
-// function to load all the products
-function displayProducts(products) {
-
-    container.replaceChildren();
-
-    for (const product of products) {
-    console.log(product.title);
-
-//Individual Product Card
-    const item_card = document.createElement("div");
-    item_card.classList.add("product-card");
-    container.appendChild(item_card);
-
-//Product Title
-    const title = document.createElement("h2");
-    title.textContent = product.title;
-
-//Product Price
-    const price = document.createElement("p");
-    price.textContent = `$${product.price}`;
-
-//Product Image
-    const image = document.createElement("img");
-    image.src = product.thumbnail;
-
-//Display the product id when the thumbnail is clicked
-    image.addEventListener("click", () => {
-        displayIndividualProduct(product);
-    });
-
-//Add to cart button
-    const button = document.createElement("button");
-    button.textContent = "Add to cart";
-
-//Display the product id and the title when the thumbnail is clicked
-    button.addEventListener("click", () => {
-        addToCart(product);
-    });
-
-    item_card.appendChild(image);
-    item_card.appendChild(title);
-    item_card.appendChild(price);
-    item_card.appendChild(button);
-
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-displayProducts(data.products);
 cart = retrieveStorage();
 displayCart();
+loadAllProducts();
 showHomeView();
