@@ -107,6 +107,24 @@ function retrieveProductStorage() {
     return JSON.parse(localStorage.getItem("allProducts")) || [];
 }
 
+function loadAllProducts() {
+    if (products.length > 0) {
+        displayProducts(products);
+
+        return;
+    }
+    try {
+        const response = await fetch("https://dummyjson.com/products?limit=100");
+        const data = await response.json(); 
+
+        products = data.products;
+
+        displayProducts(products);
+    }
+    catch {
+        console.log("There is an error somewhere");
+    }
+}
 
 //************** Individual Product ****************
 
