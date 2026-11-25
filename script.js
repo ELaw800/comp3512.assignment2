@@ -4,13 +4,14 @@ Assignment 2
 */
 
 //all data
-/*
+
 import data from "./data-minifed.json" with {type: "json"};
+/*
 const products = data.products;
 const first20 = products.slice(0, 20); //only take the first 20 products from the json
 */
 let cart = [];
-let products = [];
+let allProducts = [];
 
 //specific containers
 // ******* USED FOR ASSIGNMENT 1 ********
@@ -91,7 +92,7 @@ function showProductView() {
     productView.classList.remove("hidden");
 }
 
-//******************* local storage *****************
+//******************* local cart storage *****************
 function retrieveStorage() {
     return JSON.parse(localStorage.getItem("cart")) || [];
 }
@@ -100,8 +101,10 @@ function updateStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// ************** local all product storage ***************
+
 function retrieveProductStorage() {
-    return JSON.parse(localStorage.getItem("products")) || [];
+    return JSON.parse(localStorage.getItem("allProducts")) || [];
 }
 
 
@@ -283,8 +286,8 @@ function displayCart() {
     cartTotal.textContent = `Total: $${finalTotal.toFixed(2)}`;
 }
 
-function deleteCartItem(event) {
-    const id = Number(event.currentTarget.dataset.id);
+function deleteCartItem(e) {
+    const id = Number(e.currentTarget.dataset.id);
 
     cart = cart.filter(item => item.product.id !== id);
 
@@ -372,46 +375,51 @@ function checkout() {
 
 
 
-//loop time yay
-for (const product of first20) {
-console.log(product.title);
+// function to load all the products
+function displayProducts(products) {
+
+    container.replaceChildren();
+
+    for (const product of products) {
+    console.log(product.title);
 
 //Individual Product Card
-const item_card = document.createElement("div");
-item_card.classList.add("product-card");
-container.appendChild(item_card);
+    const item_card = document.createElement("div");
+    item_card.classList.add("product-card");
+    container.appendChild(item_card);
 
 //Product Title
-const title = document.createElement("h2");
-title.textContent = product.title;
+    const title = document.createElement("h2");
+    title.textContent = product.title;
 
 //Product Price
-const price = document.createElement("p");
-price.textContent = `$${product.price}`;
+    const price = document.createElement("p");
+    price.textContent = `$${product.price}`;
 
 //Product Image
-const image = document.createElement("img");
-image.src = product.thumbnail;
+    const image = document.createElement("img");
+    image.src = product.thumbnail;
 
 //Display the product id when the thumbnail is clicked
-image.addEventListener("click", () => {
-    displayIndividualProduct(product);
-});
+    image.addEventListener("click", () => {
+        displayIndividualProduct(product);
+    });
 
 //Add to cart button
-const button = document.createElement("button");
-button.textContent = "Add to cart";
+    const button = document.createElement("button");
+    button.textContent = "Add to cart";
 
 //Display the product id and the title when the thumbnail is clicked
-button.addEventListener("click", () => {
-    addToCart(product);
-});
+    button.addEventListener("click", () => {
+        addToCart(product);
+    });
 
-item_card.appendChild(image);
-item_card.appendChild(title);
-item_card.appendChild(price);
-item_card.appendChild(button);
+    item_card.appendChild(image);
+    item_card.appendChild(title);
+    item_card.appendChild(price);
+    item_card.appendChild(button);
 
+    }
 }
 
 
@@ -426,6 +434,10 @@ item_card.appendChild(button);
 
 
 
+
+
+
+displayProducts(data.products);
 cart = retrieveStorage();
 displayCart();
 showHomeView();
