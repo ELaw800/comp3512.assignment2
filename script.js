@@ -4,13 +4,14 @@ Assignment 2
 */
 
 //data arrays
+
+// holds the contents of the shopping cart
 let cart = [];
+// stores all the products retrieved from local storage or the products api
 let products = [];
 
-//specific containers
-// ******* USED FOR ASSIGNMENT 1 ********
+//containers for each of the products
 const container = document.querySelector("#product-container");
-// **************************************
 
 //single product accessed through the browse page
 const singleProductContainer = document.querySelector("#single_product_container");
@@ -61,6 +62,7 @@ const priceFilter = document.querySelector("#price_filter");
 
 //************** view stuff ****************
 
+//hides all of the different views first, each view will display a different page
 function hideViews() {
     homeView.classList.add("hidden");
     browseView.classList.add("hidden");
@@ -93,6 +95,8 @@ function showProductView() {
 }
 
 //******************* local cart storage *****************
+
+// retrieves the saved cart that is in local storage
 function retrieveStorage() {
     return JSON.parse(localStorage.getItem("cart")) || [];
 }
@@ -103,10 +107,11 @@ function updateStorage() {
 
 // ************** local all product storage ***************
 
+// retrieves products from local storage
 function retrieveProductFromStorage() {
     return JSON.parse(localStorage.getItem("products")) || [];
 }
-
+//saves products to local storage
 function updateProductsToStorage() {
     localStorage.setItem("products", JSON.stringify(products));
 }
@@ -117,14 +122,17 @@ async function loadAllProducts() {
     products = retrieveProductFromStorage();
 
     if (products.length > 0) {
+        console.log("local storage");
         displayProducts(products);
+        displayCategories();
 
         return;
     }
-    try {
+    try { // requesting products data from the api
         const response = await fetch("https://dummyjson.com/products?limit=100");
 
         if (response.ok) {
+            console.log("fetching");
             const data = await response.json(); 
 
             products = data.products;
@@ -132,11 +140,12 @@ async function loadAllProducts() {
             updateProductsToStorage();
 
             displayProducts(products);
+            displayCategories();
         } else {
-            console.error(error);
+            console.error("fetch not working");
         }
     }
-    catch {
+    catch (error){
         console.error(error);
     }
 }
@@ -184,6 +193,7 @@ nameFilter.addEventListener("input", filterByName);
 
 //************** Individual Product ****************
 
+// creates the individual view for a single product
 function displayIndividualProduct(product) {
         singleProductContainer.replaceChildren();
         showProductView();
@@ -223,40 +233,41 @@ function displayIndividualProduct(product) {
 
 //******************** browse page********************
 
-// function to display all of the products
+//displays all of the products by generating cards for each. 
 function displayProducts(products) {
 
     container.replaceChildren();
 
+    //for each product in the array it generates a card
     for (const product of products) {
 
-//Individual Product Card
+    //Individual Product Card
     const item_card = document.createElement("div");
     item_card.classList.add("product-card");
     container.appendChild(item_card);
 
-//Product Title
+    //Product Title
     const title = document.createElement("h2");
     title.textContent = product.title;
 
-//Product Price
+    //Product Price
     const price = document.createElement("p");
     price.textContent = `$${product.price}`;
 
-//Product Image
+    //Product Image
     const image = document.createElement("img");
     image.src = product.thumbnail;
 
-//Display the product id when the thumbnail is clicked
+    //Display the product id when the thumbnail is clicked
     image.addEventListener("click", () => {
         displayIndividualProduct(product);
     });
 
-//Add to cart button
+    //Add to cart button
     const button = document.createElement("button");
     button.textContent = "Add to cart";
 
-//Display the product id and the title when the thumbnail is clicked
+    //Display the product id and the title when the thumbnail is clicked
     button.addEventListener("click", () => {
         addToCart(product);
     });
@@ -271,8 +282,8 @@ function displayProducts(products) {
 
 /*features that need to be part of the browse page 
 - Different ways of filtering:
-    - by name
-    - by category
+    - by name D
+    - by category INP
     - by rating
     - by price
 - Different ways to change sort order: (default is product name)
@@ -282,6 +293,7 @@ function displayProducts(products) {
 - Clear all filters button
 */
 
+// filters products based on the text entered in the box
 function filterByName() {
     const searchText = nameFilter.value.toLowerCase();
 
@@ -290,11 +302,37 @@ function filterByName() {
     displayProducts(filteredProducts);
 }
 
-function filterbyCategory() {
-    
+function displayCategories() {
+    const categories = [];
+
+    for( const product of products) {
+        if (!categories.includes(product.category)) {
+            categories.push(product.category);
+        }
+    }
+    // console.log("categories running");
+    // console.log(products.length);
+
+    categoryFilter.replaceChildren();
+
+    for (const category of categories) {
+        const label = document.createElement("label");
+        const checkbox = document.createElement("input");
+
+        checkbox.type = "checkbox";
+        checkbox.value = category;
+
+        label.appendChild(checkbox);
+        label.append(` ${category}`);
+
+        categoryFilter.appendChild(label);
+        categoryFilter.appendChild(document.createElement("br"));
+    }
 }
 
 //************* cart page ****************
+
+//adds a product to the cart and if the item is a duplicate, increase the quantity
 function addToCart(product) { //this function and displayCart are based on the code from labs
     let existingItem = null;
 
@@ -318,6 +356,7 @@ function addToCart(product) { //this function and displayCart are based on the c
     displayCart();
 }
 
+//in charge of displaying the shopping cart and also does the money math
 function displayCart() {
     cartContainer.replaceChildren();
 
@@ -394,6 +433,7 @@ function displayCart() {
     cartTotal.textContent = `Total: $${finalTotal.toFixed(2)}`;
 }
 
+// removes a product from the cart
 function deleteCartItem(e) {
     const id = Number(e.currentTarget.dataset.id);
 
@@ -403,7 +443,7 @@ function deleteCartItem(e) {
     displayCart();
 }
 
-//shipping
+//calculates shipping based on item total, shipping method, and destination
 function calculateShipping(merchandiseTotal) {
     if (merchandiseTotal > 500) {
         return 0;
@@ -447,7 +487,7 @@ function calculateShipping(merchandiseTotal) {
     return 50; //prio international
 }
 
-//taxes :(
+//taxes :( are applied on canadian orders only
 function calculateTax(merchandiseTotal, shippingCost) { 
     if (shippingDestination.value === "canada") { //add tax only if the shipping destrination is canada
         return (merchandiseTotal + shippingCost) * 0.05;
@@ -456,7 +496,7 @@ function calculateTax(merchandiseTotal, shippingCost) {
     return 0;
 }
 
-//checkout time
+//checkout time clears the cart, updates storage, and returns you to the home page
 function checkout() {
     alert("Checkout complete. Purchase successful!")
 
