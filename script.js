@@ -49,6 +49,8 @@ const nameFilter = document.querySelector("#name_filter");
 const categoryFilter = document.querySelector("#category_filter");
 const ratingFilter = document.querySelector("#rating_filter");
 const priceFilter = document.querySelector("#price_filter");
+const sortFilter = document.querySelector("#sort_filter");
+const clearFiltersButton = document.querySelector("#clear_filters");
 
 //organizaion for the features
 //1. views
@@ -60,7 +62,7 @@ const priceFilter = document.querySelector("#price_filter");
 //6. shopping cart page
 //7. about popup
 
-//************** view stuff ****************
+//************** view stuff *************************************************************************************************
 
 //hides all of the different views first, each view will display a different page
 function hideViews() {
@@ -94,7 +96,7 @@ function showProductView() {
     productView.classList.remove("hidden");
 }
 
-//******************* local cart storage *****************
+//******************* local cart storage *************************************************************************************
 
 // retrieves the saved cart that is in local storage
 function retrieveStorage() {
@@ -105,7 +107,7 @@ function updateStorage() {
     localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// ************** local all product storage ***************
+// ************** local all product storage **********************************************************************************
 
 // retrieves products from local storage
 function retrieveProductFromStorage() {
@@ -150,7 +152,7 @@ async function loadAllProducts() {
     }
 }
 
-//************ event listeners *************
+//************ event listeners **********************************************************************************************
 
 //****** Nav Buttons **********
 
@@ -170,7 +172,7 @@ aboutButton.addEventListener("click", () => {
     aboutPopup.showModal();
 });
 
-//******* other *******
+//******* other ***************
 
 closeAbout.addEventListener("click", () => {
     aboutPopup.close();
@@ -188,12 +190,14 @@ checkoutButton.addEventListener("click", () => {
     checkout();
 });
 
-//***** filters *****
+//******* filters **********
 nameFilter.addEventListener("input", applyFilters);
 ratingFilter.addEventListener("change", applyFilters);
 priceFilter.addEventListener("change", applyFilters);
+sortFilter.addEventListener("change", applyFilters);
+clearFiltersButton.addEventListener("click", clearFilters);
 
-//************** Individual Product ****************
+//************** Individual Product ******************************************************************************************
 
 // creates the individual view for a single product
 function displayIndividualProduct(product) {
@@ -238,7 +242,7 @@ function displayIndividualProduct(product) {
 
 }
 
-//******************** browse page********************
+//******************** browse page********************************************************************************************
 
 //displays all of the products by generating cards for each. 
 function displayProducts(products) {
@@ -291,25 +295,15 @@ function displayProducts(products) {
 - Different ways of filtering:
     - by name D
     - by category D
-    - by rating INP
-    - by price
+    - by rating D
+    - by price D
 - Different ways to change sort order: (default is product name)
-    - name (a-z)
-    - price 
-    - category
-- Clear all filters button
+    - name (a-z) D
+    - price D
+    - category D
+- Clear all filters button INP
 */
 
-// filters products based on the text entered in the box
-/*
-function filterByName() {
-    const searchText = nameFilter.value.toLowerCase();
-
-    const filteredProducts = products.filter(product => product.title.toLowerCase().includes(searchText));
-
-    displayProducts(filteredProducts);
-}
-*/
 //builds the category checkboxes and their labels
 function displayCategories() {
     const categories = [];
@@ -341,55 +335,12 @@ function displayCategories() {
     }
 }
 
-// filters products based on which checkboxes are checked
 /*
-function filterByCategory() {
-    const checkedCategories = [];
-    const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
-    
-    for (const checkbox of checkboxes) {
-        if (checkbox.checked) {
-            checkedCategories.push(checkbox.value);
-        }
-    }
+Applies filters based on what a user has chosen.
+Options: Typing text, choosing a category, choosing a minimmum rating, based on price 
 
-    if (checkedCategories.length === 0) {
-        displayProducts(products);
-
-        return;
-    }
-
-    const filteredProducts = products.filter(product => checkedCategories.includes(product.category));
-
-    displayProducts(filteredProducts);
-}
-*/
-
-// filter products based on their rating out of five
-/*
-function filterByRating() {
-    const minimumRating = Number(ratingFilter.value);
-    const filteredProducts = products.filter(product => product.rating >= minimumRating);
-
-    displayProducts(filteredProducts);
-}
-*/
-
-// filter products based on their price (dropdown menu for products under xyz amount)
-/*
-function filterByPrice() {
-    const maxPrice = Number(priceFilter.value);
-
-    if (maxPrice === 0) {
-        displayProducts(products);
-
-        return;
-    }
-
-    const filteredProducts = products.filter(product => product.price <= maxPrice);
-
-    displayProducts(filteredProducts);
-}
+Also in charge of sorting the order in which the products appear
+Options: Name(A-Z), price, category
 */
 function applyFilters() {
     let filteredProducts = [...products]; //creating a new array from the products array
@@ -424,10 +375,65 @@ function applyFilters() {
         filteredProducts = filteredProducts.filter(product => product.price <= maxPrice);
     }
 
+    // Sorting
+    const sortType = sortFilter.value;
+
+    // Sort by name
+    if (sortType === "name") {
+        filteredProducts.sort(function(a, b) {
+            if (a.title < b.title) {
+                return -1;
+            } else if (a.title > b.title) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
+    // Sort by price
+    if( sortType === "price") {
+        filteredProducts.sort(function(a, b) {
+            if (a.price < b.price) {
+                return -1;
+            } else if (a.price > b.price) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
+    //Sort by category
+    if (sortType === "category") {
+        filteredProducts.sort(function(a, b) {
+            if (a.category < b.categories) {
+                return -1;
+            } else if (a.category > b.categories) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+    }
+
     displayProducts(filteredProducts);
 }
 
-//************* cart page ****************
+function clearFilters() {
+    nameFilter.value ="";
+    ratingFilter.value ="0";
+    priceFilter.value ="0";
+    sortFilter.value ="name"
+
+    const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
+    for (const checkbox of checkboxes) {
+        checkbox.checked = false;
+    }
+
+    applyFilters();
+}
+//************* cart page **********************************************************************************************
 
 //adds a product to the cart and if the item is a duplicate, increase the quantity
 function addToCart(product) { //this function and displayCart are based on the code from labs

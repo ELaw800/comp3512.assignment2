@@ -25,11 +25,11 @@ Assignment 2
         <!--Browse button-->
         <button id="browse_button">BROWSE</button>
 
-        <!--Cart button-->
-        <button id="cart_button">CART</button>
-
         <!--About button-->
         <button id="about_button">ABOUT</button>
+
+        <!--Cart button-->
+        <button id="cart_button">CART</button>
         
     </nav>
 
@@ -69,11 +69,28 @@ Assignment 2
                     <!--PRICE FILTER-->
                     <select id="price_filter">
                         <option value="0">Any Price</option>
+                        <option value="10">Under $10</option>
                         <option value="25">Under $25</option>
                         <option value="100">Under $100</option>
                         <option value="250">Under $250</option>
                         <option value="1000">Under $1000</option>
                     </select>
+
+                    <!--SORTING-->
+                    <label>
+                        Sort By:
+                    </label>
+
+                    <select id="sort_filter">
+                        <option value="name">Name (A-Z)</option>
+                        <option value="price">Price: Low to High</option>
+                        <option value="category">Category</option>
+                    </select>
+
+                    <!--CLEAR FILTERS-->
+                    <button id="clear_filters">
+                        Clear Filters
+                    </button>
 
                 </section>
 
