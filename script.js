@@ -200,18 +200,57 @@ clearFiltersButton.addEventListener("click", clearFilters);
 
 // creates the individual view for a single product
 function displayIndividualProduct(product) {
+
+        // BREADCRUMB NAVIGATION
+        const breadcrumb = document.querySelector("#breadcrumb");
+        breadcrumb.replaceChildren();
+
+        const homeCrumb = document.createElement("a")
+        homeCrumb.textContent = "HOME";
+        homeCrumb.href = "#"
+
+        homeCrumb.addEventListener("click", (e) => {
+            e.preventDefault();
+            showHomeView();
+        });
+
+        const browseCrumb = document.createElement("a");
+        browseCrumb.textContent = "BROWSE";
+        browseCrumb.href = "#";
+
+        browseCrumb.addEventListener("click", (e) => {
+            e.preventDefault();
+            showBrowseView();
+        });
+
+        const categoryCrumb = document.createElement("span");
+        categoryCrumb.textContent = product.category;
+
+        const nameCrumb = document.createElement("span");
+        nameCrumb.textContent = product.title;
+
+        breadcrumb.appendChild(homeCrumb);
+        breadcrumb.append("  >  ");
+        breadcrumb.appendChild(browseCrumb);
+        breadcrumb.append("  >  ");
+        breadcrumb.appendChild(categoryCrumb);
+        breadcrumb.append("  >  ");
+        breadcrumb.appendChild(nameCrumb);
+
+
+        //PRODUCT INFORMATION
         singleProductContainer.replaceChildren();
         showProductView();
 
-        // title
+        //item title
         const title = document.createElement("h2");
         title.textContent = product.title;
 
-        // rating
+        //item rating
         const rating = document.createElement("p");
         rating.textContent = `Rating: ${product.rating} / 5 Stars`;
 
-        //price 
+        //item price 
         const price = document.createElement("p");
         price.textContent = `$${product.price}`;
 
@@ -223,20 +262,117 @@ function displayIndividualProduct(product) {
         const description = document.createElement("p");
         description.textContent = product.description;
 
+        // item sku
+        const sku = document.createElement("p");
+        sku.textContent = `SKU: ${product.sku}`;
+
+        //item tags
+        const tags = document.createElement("p");
+        tags.textContent = `Tags: ${product.tags}`;
+
+        //item stock
+        const stock = document.createElement("p")
+        if (product.stock > 0) {
+            stock.textContent = `${product.availabilityStatus}: (${product.stock} available)`;
+        } else {
+            stock.textContent = "Out of Stock";
+        }; 
+
+        //item quantity
+        const quantityInput = document.createElement("input");
+        quantityInput.type = "number";
+        quantityInput.value = 1;
+        quantityInput.min = 1;
+
         //add to cart button
         const addToCartButton = document.createElement("button");
         addToCartButton.textContent = "Add to Cart";
 
         addToCartButton.addEventListener("click", () => {
-            addToCart(product);
+            const quantity= Number(quantityInput.value);
+            addToCart(product, quantity);
         });
+
+
+        //SPECIFICATIONS SECTION
+        const specifications = document.createElement("section");
+        const specificationsHeading = document.createElement("h3");
+
+        specificationsHeading.textContent = "Specifications"
+
+        //item weight
+        const weight = document.createElement("p");
+        weight.textContent = `Weight: ${product.weight} mystery units`;
+
+        //item dimensions
+        const dimensions = document.createElement("p");
+        dimensions.textContent = `Dimensions: ${product.dimensions.width}" x ${product.dimensions.height}"
+        x ${product.dimensions.depth}"`;
+
+        //item warranty
+        const warranty = document.createElement("p");
+        warranty.textContent = `Warranty: ${product.warrantyInformation}`;
+
+        //item shipping information
+        const shippingInfo = document.createElement("p");
+        shippingInfo.textContent = `${product.shippingInformation}!`;
+
+        //item return policy
+        const returnPolicy = document.createElement("p");
+        returnPolicy.textContent = `${product.returnPolicy}`;
+
+        specifications.appendChild(specificationsHeading);
+        specifications.appendChild(weight);
+        specifications.appendChild(dimensions);
+        specifications.appendChild(warranty);
+        specifications.appendChild(shippingInfo);
+        specifications.appendChild(returnPolicy);
+
+        //REVIEWS SECTION
+        const reviewSection = document.createElement("section");
+
+        const reviewHeading = document.createElement("h3");
+        reviewHeading.textContent = "Reviews";
+        reviewSection.appendChild(reviewHeading);
+
+        for (const review of product.reviews) {
+            const reviewBlock = document.createElement("div");
+
+            // Name
+            const reviewerName = document.createElement("p");
+            reviewerName.textContent = review.reviewerName
+            // Rating
+            const reviewerRating = document.createElement("p");
+            reviewerRating.textContent = `Rating: ${review.rating} / 5`;
+            // Comments
+            const reviewerComment = document.createElement("p");
+            reviewerComment.textContent = review.comment;
+            // Date 
+            const reviewDate = document.createElement("p");
+            const date = new Date(review.date); //changes to a readable format
+            reviewDate.textContent = date.toLocaleDateString();
+
+            reviewBlock.appendChild(reviewerName);
+            reviewBlock.appendChild(reviewerRating);
+            reviewBlock.appendChild(reviewerComment);
+            reviewBlock.appendChild(reviewDate);
+
+            reviewSection.appendChild(reviewBlock);
+        }
+
 
         //display order
         singleProductContainer.appendChild(image);
         singleProductContainer.appendChild(title);
-        singleProductContainer.appendChild(rating);
         singleProductContainer.appendChild(price);
+        singleProductContainer.appendChild(rating);
+        singleProductContainer.appendChild(sku);
+        singleProductContainer.appendChild(tags);
+        singleProductContainer.appendChild(stock);
         singleProductContainer.appendChild(description);
+        singleProductContainer.appendChild(specifications);
+        singleProductContainer.appendChild(reviewSection);
+        singleProductContainer.appendChild(quantityInput);
         singleProductContainer.appendChild(addToCartButton);
 
 }
@@ -277,7 +413,7 @@ function displayProducts(products) {
     const image = document.createElement("img");
     image.src = product.thumbnail;
 
-    //Display the product id when the thumbnail is clicked
+    //opens the individual product page when the image is clicked
     image.addEventListener("click", () => {
         displayIndividualProduct(product);
     });
@@ -286,9 +422,9 @@ function displayProducts(products) {
     const button = document.createElement("button");
     button.textContent = "Add to cart";
 
-    //Display the product id and the title when the thumbnail is clicked
+    //Adds 1 item to the cart when clicked
     button.addEventListener("click", () => {
-        addToCart(product);
+        addToCart(product, 1);
     });
 
     item_card.appendChild(image);
@@ -444,7 +580,7 @@ function clearFilters() {
 //************* cart page **********************************************************************************************
 
 //adds a product to the cart and if the item is a duplicate, increase the quantity
-function addToCart(product) { //this function and displayCart are based on the code from labs
+function addToCart(product, quantity) { //this function and displayCart are based on the code from labs
     let existingItem = null;
 
     for (const item of cart) {
@@ -454,12 +590,9 @@ function addToCart(product) { //this function and displayCart are based on the c
     }
 
     if (existingItem) {
-        existingItem.quantity++;
+        existingItem.quantity += quantity;
     } else {
-        const newItem = {
-            product: product,
-            quantity: 1
-        };
+        const newItem = {product: product, quantity: quantity};
         
         cart.push(newItem);
     }
