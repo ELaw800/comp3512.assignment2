@@ -302,6 +302,7 @@ function filterByName() {
     displayProducts(filteredProducts);
 }
 
+//builds the category checkboxes and their labels
 function displayCategories() {
     const categories = [];
 
@@ -322,6 +323,8 @@ function displayCategories() {
         checkbox.type = "checkbox";
         checkbox.value = category;
 
+        checkbox.addEventListener("change", filterByCategory);
+
         label.appendChild(checkbox);
         label.append(` ${category}`);
 
@@ -329,6 +332,29 @@ function displayCategories() {
         categoryFilter.appendChild(document.createElement("br"));
     }
 }
+
+function filterByCategory() {
+    const checkedCategories = [];
+    const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
+    
+    for (const checkbox of checkboxes) {
+        if (checkbox.checked) {
+            checkedCategories.push(checkbox.value);
+        }
+    }
+
+    if (checkedCategories.length === 0) {
+        displayProducts(products);
+
+        return;
+    }
+
+    const filteredProducts = products.filter(product => checkedCategories.includes(product.category));
+
+    displayProducts(filteredProducts);
+}
+
+
 
 //************* cart page ****************
 
