@@ -190,6 +190,8 @@ checkoutButton.addEventListener("click", () => {
 
 //***** filters *****
 nameFilter.addEventListener("input", filterByName);
+ratingFilter.addEventListener("change", filterByRating);
+priceFilter.addEventListener("change", filterByPrice);
 
 //************** Individual Product ****************
 
@@ -283,8 +285,8 @@ function displayProducts(products) {
 /*features that need to be part of the browse page 
 - Different ways of filtering:
     - by name D
-    - by category INP
-    - by rating
+    - by category D
+    - by rating INP
     - by price
 - Different ways to change sort order: (default is product name)
     - name (a-z)
@@ -333,6 +335,7 @@ function displayCategories() {
     }
 }
 
+// filters products based on which checkboxes are checked
 function filterByCategory() {
     const checkedCategories = [];
     const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
@@ -354,6 +357,26 @@ function filterByCategory() {
     displayProducts(filteredProducts);
 }
 
+function filterByRating() {
+    const minimumRating = Number(ratingFilter.value);
+    const filteredProducts = products.filter(product => product.rating >= minimumRating);
+
+    displayProducts(filteredProducts);
+}
+
+function filterByPrice() {
+    const maxPrice = Number(priceFilter.value);
+
+    if (maxPrice === 0) {
+        displayProducts(products);
+
+        return;
+    }
+
+    const filteredProducts = products.filter(product => product.price <= maxPrice);
+
+    displayProducts(filteredProducts);
+}
 
 
 //************* cart page ****************
