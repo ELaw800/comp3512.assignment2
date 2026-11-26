@@ -125,8 +125,8 @@ async function loadAllProducts() {
 
     if (products.length > 0) {
         console.log("local storage");
-        displayProducts(products);
         displayCategories();
+        applyFilters();
 
         return;
     }
@@ -140,9 +140,8 @@ async function loadAllProducts() {
             products = data.products;
             console.log(products);
             updateProductsToStorage();
-
-            displayProducts(products);
             displayCategories();
+            applyFilters();
         } else {
             console.error("fetch not working");
         }
@@ -249,6 +248,15 @@ function displayProducts(products) {
 
     container.replaceChildren();
 
+    if (products.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "No products match your current filters."
+
+        container.appendChild(message);
+
+        return;
+    }
+
     //for each product in the array it generates a card
     for (const product of products) {
 
@@ -301,7 +309,7 @@ function displayProducts(products) {
     - name (a-z) D
     - price D
     - category D
-- Clear all filters button INP
+- Clear all filters button D
 */
 
 //builds the category checkboxes and their labels
@@ -555,6 +563,10 @@ function calculateShipping(merchandiseTotal) {
     const method = shippingMethod.value;
     const destination = shippingDestination.value;
 
+    if (method === "none") {
+        return 0;
+    }
+
     if (method === "standard") {
         if (destination === "canada") {
             return 10;
@@ -592,7 +604,8 @@ function calculateShipping(merchandiseTotal) {
 
 //taxes :( are applied on canadian orders only
 function calculateTax(merchandiseTotal, shippingCost) { 
-    if (shippingDestination.value === "canada") { //add tax only if the shipping destrination is canada
+    if (shippingDestination.value === "canada" && shippingMethod.value !== "none") 
+        { //add tax only if the shipping destrination is canada
         return (merchandiseTotal + shippingCost) * 0.05;
     }
 
