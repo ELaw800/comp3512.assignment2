@@ -189,9 +189,9 @@ checkoutButton.addEventListener("click", () => {
 });
 
 //***** filters *****
-nameFilter.addEventListener("input", filterByName);
-ratingFilter.addEventListener("change", filterByRating);
-priceFilter.addEventListener("change", filterByPrice);
+nameFilter.addEventListener("input", applyFilters);
+ratingFilter.addEventListener("change", applyFilters);
+priceFilter.addEventListener("change", applyFilters);
 
 //************** Individual Product ****************
 
@@ -203,6 +203,10 @@ function displayIndividualProduct(product) {
         // title
         const title = document.createElement("h2");
         title.textContent = product.title;
+
+        // rating
+        const rating = document.createElement("p");
+        rating.textContent = `Rating: ${product.rating} / 5 Stars`;
 
         //price 
         const price = document.createElement("p");
@@ -227,6 +231,7 @@ function displayIndividualProduct(product) {
         //display order
         singleProductContainer.appendChild(image);
         singleProductContainer.appendChild(title);
+        singleProductContainer.appendChild(rating);
         singleProductContainer.appendChild(price);
         singleProductContainer.appendChild(description);
         singleProductContainer.appendChild(addToCartButton);
@@ -296,6 +301,7 @@ function displayProducts(products) {
 */
 
 // filters products based on the text entered in the box
+/*
 function filterByName() {
     const searchText = nameFilter.value.toLowerCase();
 
@@ -303,7 +309,7 @@ function filterByName() {
 
     displayProducts(filteredProducts);
 }
-
+*/
 //builds the category checkboxes and their labels
 function displayCategories() {
     const categories = [];
@@ -325,7 +331,7 @@ function displayCategories() {
         checkbox.type = "checkbox";
         checkbox.value = category;
 
-        checkbox.addEventListener("change", filterByCategory);
+        checkbox.addEventListener("change", applyFilters);
 
         label.appendChild(checkbox);
         label.append(` ${category}`);
@@ -336,6 +342,7 @@ function displayCategories() {
 }
 
 // filters products based on which checkboxes are checked
+/*
 function filterByCategory() {
     const checkedCategories = [];
     const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
@@ -356,14 +363,20 @@ function filterByCategory() {
 
     displayProducts(filteredProducts);
 }
+*/
 
+// filter products based on their rating out of five
+/*
 function filterByRating() {
     const minimumRating = Number(ratingFilter.value);
     const filteredProducts = products.filter(product => product.rating >= minimumRating);
 
     displayProducts(filteredProducts);
 }
+*/
 
+// filter products based on their price (dropdown menu for products under xyz amount)
+/*
 function filterByPrice() {
     const maxPrice = Number(priceFilter.value);
 
@@ -377,7 +390,42 @@ function filterByPrice() {
 
     displayProducts(filteredProducts);
 }
+*/
+function applyFilters() {
+    let filteredProducts = [...products]; //creating a new array from the products array
 
+    // Name filter -- filters products based on the text entered in the box
+    const searchText = nameFilter.value.toLowerCase();
+
+    filteredProducts = filteredProducts.filter(product => product.title.toLowerCase().includes(searchText));
+
+    // Category filter -- filters products based on which checkboxes are checked
+    const checkedCategories = [];
+    const checkboxes = categoryFilter.querySelectorAll('input[type="checkbox"]');
+    
+    for (const checkbox of checkboxes) {
+        if (checkbox.checked) {
+            checkedCategories.push(checkbox.value);
+        }
+    }
+
+    if (checkedCategories.length > 0) {
+        filteredProducts = filteredProducts.filter(product => checkedCategories.includes(product.category));
+    }
+
+    // Rating filter -- filter products based on their rating out of five
+    const minimumRating = Number(ratingFilter.value);
+    filteredProducts = filteredProducts.filter(product => product.rating >= minimumRating);
+
+    // Price filter -- filter products based on their price (dropdown menu for products under xyz amount)
+    const maxPrice = Number(priceFilter.value);
+
+    if (maxPrice > 0) {
+        filteredProducts = filteredProducts.filter(product => product.price <= maxPrice);
+    }
+
+    displayProducts(filteredProducts);
+}
 
 //************* cart page ****************
 
