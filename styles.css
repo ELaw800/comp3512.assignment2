@@ -4,6 +4,12 @@ Assignment 1
 Ethan Law
 */
 
+/*hide the different views */
+.hidden {
+    display: none;
+}
+
+/************* Basic Styling **************/
 body {
     background-color: #FCFFFF;
     font-family: Arial, Helvetica, sans-serif;
@@ -22,16 +28,96 @@ body {
     min-height: 60px;
 }
 
+.active_page {
+    background-color: beige;
+    color: black;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+nav button {
+    min-width: 120px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* ********** Header ************ */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+/* logo */
+#site_logo {
+    width: 100px;
+    border: 2px solid orange;
+    cursor: pointer;
+}
+
+/************ Home page *********/
+#home_view {
+    text-align: center;
+    padding: 2rem;
+    margin: 0 auto;
+}
+
+#featured_products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* ****** Browse Page ********* */
+
+#browse_layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+}
+
+#filters {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: white;
+    height: fit-content;
+}
+details {
+    margin-bottom: 1rem;
+}
+summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#sort_filter {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#clear_filters {
+    width: 100%;
+}
+
 /* Image thumbnails */
 .product-card img {
     width: 100%;
     height: 300px;
-    object-fit: cover;
+    object-fit: contain;
     cursor: pointer;
     background-color: whitesmoke;
     border-radius: 8px;
 }
-.product-card h2 {
+/* product titles */
+.product-card h2, .product-card h3 {
     cursor: pointer;
 }
 
@@ -53,11 +139,16 @@ body {
     gap: 20px;
 }
 
-/*hide the different views */
-.hidden {
-    display: none;
+.product-card {
+    transition: 0.2s;
+    min-height: 300px;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgb(153, 153, 153);
 }
 
+/* *************** Cart Page *********** */
 /* items in cart */
 .cart-item {
     display: grid;
@@ -74,6 +165,59 @@ body {
     width: 100px;
 }
 
+/* ************ Individual product ***********/
+#single_product_container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px black;
+}
+.product_header {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.product_info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.product_info input[type="number"] {
+    width: 100px;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+.product_info button {
+    width: 250px;
+    padding: 12px;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.product_price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: green;
+}
+
+.product_image {
+    width: 100%;
+    max-width: 350px;
+    height: 350px;
+    object-fit: contain;
+
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 20px;
+}
 /* review section outline */
 .review_block {
     border-bottom: 1px solid gray;
@@ -86,20 +230,38 @@ body {
     overflow-y: auto;
 }
 
-/* logo */
-#site_logo svg {
-    width: 100px;
-}
-
-/* about x button */
-#about_close_x {
-    float: right;
-}
-
 /* individual item tags */
 .tag_pill {
+    display: inline-block;
     border: 1px solid black;
     border-radius: 20px;
     padding: 4px 8px;
     margin-right: 5px;
 }
+/* breadcrumb navigation */
+#breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+#breadcrumb a {
+    text-decoration: none;
+}
+#breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.tab_box {
+    margin-bottom: 20px;
+}
+.tab_box button {
+    padding: 10px 20px;
+    margin-right: 5px;
+    border-radius: 8px 8px 0 0;
+}
+
+/* ********* about page **********/
+/* about x button */
+#about_close_x {
+    float: right;
+}
+

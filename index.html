@@ -15,9 +15,15 @@ Assignment 2
 
 <body>
     <header>
-        <svg id="site_logo" src="images/clker-free-vector-images-tiger-48301.svg" alt="logo"></svg>
+        <img id="site_logo" src="images/dragonlogo.svg" alt="tiger logo">
+        <!--Image by OpenClipart-Vectors on Pixabay
+            https://pixabay.com/vectors/animal-dragon-myth-mythical-1297852/
+        -->
 
         <h1>COMP 3512 Assignment 2</h1>
+
+        <!--Cart button-->
+        <button id="cart_button">CART</button>
     </header>
 
     <nav>
@@ -29,15 +35,12 @@ Assignment 2
 
         <!--About button-->
         <button id="about_button">ABOUT</button>
-
-        <!--Cart button-->
-        <button id="cart_button">CART</button>
         
     </nav>
 
     <main>
-    
-        <article id="home_view" class="hidden"> <!--View #1 Home-->
+        <!--View #1 Home-->
+        <article id="home_view" class="hidden"> 
             <h2>Welcome to the COMP 3512-A2 Shop</h2>
             <p>Here you can find many products to view and purchse.</p>
 
@@ -45,11 +48,14 @@ Assignment 2
             <section id="featured_products"></section>
         </article>
 
-        <article id="browse_view" class="hidden"> <!--View #2 Browse-->
+        <!--View #2 Browse-->
+        <article id="browse_view" class="hidden"> 
             <h2>Browse</h2>
 
+            <section id="browse_layout">
+
                 <section id="filters">
-                    <h3>Departments</h5>
+                    <h3>Departments</h3>
 
                     <!--NAME FILTER-->
                     <details>
@@ -114,16 +120,20 @@ Assignment 2
                 </section>
 
                 <section id="product-container"></section>
+
+            </section>
         </article>
 
-        <article id="product_view" class="hidden"> <!--View #3 Single Product-->
+         <!--View #3 Single Product-->
+        <article id="product_view" class="hidden">
             <nav id="breadcrumb"></nav>
 
             <section id="single_product_container"></section>
 
         </article>
 
-        <article id="cart_view" class="hidden"> <!--View #4 Cart-->
+         <!--View #4 Cart-->
+        <article id="cart_view" class="hidden">
             <h2>Cart</h2>
 
             <section id="cart_container"></section>

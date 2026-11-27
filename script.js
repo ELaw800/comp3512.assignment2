@@ -85,24 +85,38 @@ function showHomeView() {
     hideViews();
 
     homeView.classList.remove("hidden");
+
+    updateNavigation(homeButton);
 }
 
 function showBrowseView() {
     hideViews();
 
     browseView.classList.remove("hidden");
+
+    updateNavigation(browseButton);
 }
 
 function showCartView() {
     hideViews();
 
     cartView.classList.remove("hidden");
+
+    updateNavigation(cartButton);
 }
 
 function showProductView() {
     hideViews();
 
     productView.classList.remove("hidden");
+}
+
+//which page is the user on based on button
+function updateNavigation(button) {
+    homeButton.classList.remove("active_page");
+    browseButton.classList.remove("active_page");
+    cartButton.classList.remove("active_page");
+    button.classList.add("active_page");
 }
 
 //displays a message for a set amount of time
@@ -195,7 +209,6 @@ cartButton.addEventListener("click", () => {
 aboutButton.addEventListener("click", () => {
     aboutPopup.showModal();
 });
-
 
 //******* about popup ***************
 
@@ -319,6 +332,7 @@ function displayIndividualProduct(product) {
         //image
         const image = document.createElement("img");
         image.src = product.thumbnail;
+        image.classList.add("product_image")
 
         //item description
         const description = document.createElement("p");
@@ -361,8 +375,30 @@ function displayIndividualProduct(product) {
             addToCart(product, quantity);
         });
 
+        price.classList.add("product_price");
+        
+        const productHeader = document.createElement("div");
+        productHeader.classList.add("product_header");
+        
+        const productInfo = document.createElement("div");
+        productInfo.classList.add("product_info");
+
+        productInfo.appendChild(title);
+        productInfo.appendChild(price);
+        productInfo.appendChild(rating);
+        productInfo.appendChild(sku);
+        productInfo.appendChild(tags);
+        productInfo.appendChild(stock);
+        productInfo.appendChild(description);
+        productInfo.appendChild(quantityInput);
+        productInfo.appendChild(addToCartButton);
+
+        productHeader.appendChild(image);
+        productHeader.appendChild(productInfo);
+
         //SEPARATE BOX START**************
         const tabBox = document.createElement("div");
+        tabBox.classList.add("tab_box");
         const specificationsButton = document.createElement("button");
         const reviewsButton = document.createElement("button");
 
@@ -459,21 +495,11 @@ function displayIndividualProduct(product) {
 
 
         //display order: 1.product --> info 2.specs+reviews --> 3.add to cart
-        singleProductContainer.appendChild(image);
-        singleProductContainer.appendChild(title);
-        singleProductContainer.appendChild(price);
-        singleProductContainer.appendChild(rating);
-        singleProductContainer.appendChild(sku);
-        singleProductContainer.appendChild(tags);
-        singleProductContainer.appendChild(stock);
-        singleProductContainer.appendChild(description);
+        singleProductContainer.appendChild(productHeader);
 
         singleProductContainer.appendChild(tabBox);
         singleProductContainer.appendChild(specifications);
         singleProductContainer.appendChild(reviewSection);
-
-        singleProductContainer.appendChild(quantityInput);
-        singleProductContainer.appendChild(addToCartButton);
 
 }
 
@@ -544,7 +570,7 @@ function displayProducts(products) {
 
 //builds the category checkboxes and their labels
 function displayCategories() {
-    
+
     const categories = new Set();
     for (const product of products) {
         categories.add(product.category);
@@ -656,7 +682,7 @@ function applyFilters() {
 
     displayProducts(filteredProducts);
 }
-
+//gets rid of all filters applied on the browse page
 function clearFilters() {
     nameFilter.value ="";
     ratingFilter.value ="0";
