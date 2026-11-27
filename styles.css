@@ -31,6 +31,9 @@ body {
     background-color: whitesmoke;
     border-radius: 8px;
 }
+.product-card h2 {
+    cursor: pointer;
+}
 
 /* Add to cart button */
 .product-card button {
@@ -81,4 +84,14 @@ body {
 .review_section {
     max-height: 300px;
     overflow-y: auto;
+}
+
+/* logo */
+#site_logo svg {
+    width: 100px;
+}
+
+/* about x button */
+#about_close_x {
+    float: right;
 }

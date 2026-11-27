@@ -35,6 +35,9 @@ const browseButton = document.querySelector("#browse_button");
 const cartButton = document.querySelector("#cart_button");
 const aboutButton = document.querySelector("#about_button");
 
+//Logo
+const siteLogo = document.querySelector("#site_logo");
+
 // Different Views of the nav bar
 const homeView = document.querySelector("#home_view");
 const browseView = document.querySelector("#browse_view");
@@ -43,6 +46,10 @@ const cartView = document.querySelector("#cart_view");
 
 const aboutPopup = document.querySelector("#about_popup")
 const closeAbout = document.querySelector("#close_about")
+const aboutX = document.querySelector("#close_about_x");
+
+// Home page
+const featuredProductsHouse = document.querySelector("#featured_products");
 
 // Browse page 
 const nameFilter = document.querySelector("#name_filter");
@@ -126,6 +133,7 @@ async function loadAllProducts() {
     if (products.length > 0) {
         console.log("local storage");
         displayCategories();
+        displayFeaturedProducts();
         applyFilters();
 
         return;
@@ -138,9 +146,10 @@ async function loadAllProducts() {
             const data = await response.json(); 
 
             products = data.products;
-            console.log(products);
+            
             updateProductsToStorage();
             displayCategories();
+            displayFeaturedProducts();
             applyFilters();
         } else {
             console.error("fetch not working");
@@ -152,6 +161,10 @@ async function loadAllProducts() {
 }
 
 //************ event listeners **********************************************************************************************
+// site logo
+siteLogo.addEventListener("click", () => {
+    showHomeView();
+})
 
 //****** Nav Buttons **********
 
@@ -171,11 +184,18 @@ aboutButton.addEventListener("click", () => {
     aboutPopup.showModal();
 });
 
-//******* other ***************
+
+//******* about popup ***************
 
 closeAbout.addEventListener("click", () => {
     aboutPopup.close();
 })
+
+aboutX.addEventListener("click", () => {
+    aboutPopup.close();
+})
+
+//*******shipping *****************
 
 shippingMethod.addEventListener("change", () => {
     displayCart();
@@ -195,6 +215,28 @@ ratingFilter.addEventListener("change", applyFilters);
 priceFilter.addEventListener("change", applyFilters);
 sortFilter.addEventListener("change", applyFilters);
 clearFiltersButton.addEventListener("click", clearFilters);
+
+//******************** home page **********************************************************************************************
+
+// display products on home page by calling createProductCard
+function displayFeaturedProducts() {
+    featuredProductsHouse.replaceChildren();
+
+    //randomize which products appear
+    const randomProducts = [...products];
+    randomProducts.sort(() => {
+        return Math.random() - 0.5;
+    });
+
+    const featuredProducts = randomProducts.slice(0, 4);
+
+    for (const product of featuredProducts) {
+        const card = createProductCard(product);
+
+        featuredProductsHouse.appendChild(card);
+    }
+
+}
 
 //************** Individual Product ******************************************************************************************
 
@@ -404,8 +446,49 @@ function displayIndividualProduct(product) {
 }
 
 //******************** browse page********************************************************************************************
+// create a product card
+function createProductCard(product) {
+    const itemCard = document.createElement("div");
+    itemCard.classList.add("product-card");
 
-//displays all of the products by generating cards for each. 
+    //title
+    const title = document.createElement("h2");
+    title.textContent = product.title;
+
+    //thumbnail
+    const image = document.createElement("img");
+    image.src = product.thumbnail;
+
+    //price
+    const price = document.createElement("p");
+    price.textContent = `$${product.price}`;
+        
+    //Add to cart button
+    const button = document.createElement("button");
+    button.textContent = "Add to cart";
+
+    //opens the individual product page when the image or title is clicked
+    image.addEventListener("click", () => {
+        displayIndividualProduct(product);
+    });
+    title.addEventListener("click", () => {
+        displayIndividualProduct(product);
+    })
+
+    //Adds 1 item to the cart when clicked
+    button.addEventListener("click", () => {
+        addToCart(product, 1);
+    });
+
+    itemCard.appendChild(image);
+    itemCard.appendChild(title);
+    itemCard.appendChild(price);
+    itemCard.appendChild(button);
+
+    return itemCard;
+}
+
+//displays all of the products by calling createProductCard
 function displayProducts(products) {
 
     container.replaceChildren();
@@ -421,58 +504,11 @@ function displayProducts(products) {
 
     //for each product in the array it generates a card
     for (const product of products) {
-
-    //Individual Product Card
-    const item_card = document.createElement("div");
-    item_card.classList.add("product-card");
-    container.appendChild(item_card);
-
-    //Product Title
-    const title = document.createElement("h2");
-    title.textContent = product.title;
-
-    //Product Price
-    const price = document.createElement("p");
-    price.textContent = `$${product.price}`;
-
-    //Product Image
-    const image = document.createElement("img");
-    image.src = product.thumbnail;
-
-    //opens the individual product page when the image is clicked
-    image.addEventListener("click", () => {
-        displayIndividualProduct(product);
-    });
-
-    //Add to cart button
-    const button = document.createElement("button");
-    button.textContent = "Add to cart";
-
-    //Adds 1 item to the cart when clicked
-    button.addEventListener("click", () => {
-        addToCart(product, 1);
-    });
-
-    item_card.appendChild(image);
-    item_card.appendChild(title);
-    item_card.appendChild(price);
-    item_card.appendChild(button);
-
+    
+        const card = createProductCard(product);
+        container.appendChild(card);
     }
 }
-
-/*features that need to be part of the browse page 
-- Different ways of filtering:
-    - by name D
-    - by category D
-    - by rating D
-    - by price D
-- Different ways to change sort order: (default is product name)
-    - name (a-z) D
-    - price D
-    - category D
-- Clear all filters button D
-*/
 
 //builds the category checkboxes and their labels
 function displayCategories() {
@@ -502,7 +538,8 @@ function displayCategories() {
 
         categoryFilter.appendChild(label);
         categoryFilter.appendChild(document.createElement("br"));
-    }
+        
+    } 
 }
 
 /*
@@ -577,9 +614,9 @@ function applyFilters() {
     //Sort by category
     if (sortType === "category") {
         filteredProducts.sort(function(a, b) {
-            if (a.category < b.categories) {
+            if (a.category < b.category) {
                 return -1;
-            } else if (a.category > b.categories) {
+            } else if (a.category > b.category) {
                 return 1;
             } else {
                 return 0;
@@ -603,6 +640,16 @@ function clearFilters() {
 
     applyFilters();
 }
+
+//cart number badge (# of items in the cart updates automatically)
+function updateCartBadge() {
+    let totalItems = 0;
+    for (const item of cart) {
+        totalItems += item.quantity;
+    }
+
+    cartButton.textContent = `CART (${totalItems})`;
+}
 //************* cart page **********************************************************************************************
 
 //adds a product to the cart and if the item is a duplicate, increase the quantity
@@ -623,6 +670,7 @@ function addToCart(product, quantity) { //this function and displayCart are base
         cart.push(newItem);
     }
     updateStorage();
+    updateCartBadge();
     displayCart();
 }
 
@@ -710,6 +758,7 @@ function deleteCartItem(e) {
     cart = cart.filter(item => item.product.id !== id);
 
     updateStorage();
+    updateCartBadge();
     displayCart();
 }
 
@@ -779,6 +828,7 @@ function checkout() {
 
     updateStorage();
     displayCart();
+    updateCartBadge();
     showHomeView();
 }
 
@@ -791,6 +841,7 @@ function checkout() {
 
 // make sure everything is loaded 
 cart = retrieveStorage();
+updateCartBadge();
 displayCart();
 loadAllProducts();
 showHomeView();

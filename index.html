@@ -15,7 +15,7 @@ Assignment 2
 
 <body>
     <header>
-        <img id="site_logo" src="images/clker-free-vector-images-tiger-48301.svg" alt="logo">
+        <svg id="site_logo" src="images/clker-free-vector-images-tiger-48301.svg" alt="logo"></svg>
 
         <h1>COMP 3512 Assignment 2</h1>
     </header>
@@ -38,8 +38,11 @@ Assignment 2
     <main>
     
         <article id="home_view" class="hidden"> <!--View #1 Home-->
-            <h2>Home</h2>
-            <p>blah blah blah</p>
+            <h2>Welcome to the COMP 3512-A2 Shop</h2>
+            <p>Here you can find many products to view and purchse.</p>
+            
+            <h3>Featured Products</h3>
+            <section id="featured_products"></section>
         </article>
 
         <article id="browse_view" class="hidden"> <!--View #2 Browse-->
@@ -158,6 +161,10 @@ Assignment 2
                 <h3>Stuff</h3>
                 <p>more stuff</p>
             </section>
+
+            <button id="close_about_x">
+                X
+            </button>
 
             <button id="close_about">
                 Close
