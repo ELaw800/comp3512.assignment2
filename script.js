@@ -4,7 +4,6 @@ Assignment 2
 */
 
 //data arrays
-
 // holds the contents of the shopping cart
 let cart = [];
 // stores all the products retrieved from local storage or the products api
@@ -59,6 +58,9 @@ const priceFilter = document.querySelector("#price_filter");
 const sortFilter = document.querySelector("#sort_filter");
 const clearFiltersButton = document.querySelector("#clear_filters");
 
+//toaster message
+const toast = document.querySelector("#toaster");
+
 //organizaion for the features
 //1. views
 //2. local storage
@@ -101,6 +103,16 @@ function showProductView() {
     hideViews();
 
     productView.classList.remove("hidden");
+}
+
+//displays a message for a set amount of time
+function showToaster(message) { 
+    toast.textContent = message;
+    toast.classList.remove("hidden");
+
+    setTimeout (() => {
+        toast.classList.add("hidden");
+    }, 3000);
 }
 
 //******************* local cart storage *************************************************************************************
@@ -290,7 +302,15 @@ function displayIndividualProduct(product) {
 
         //item rating
         const rating = document.createElement("p");
-        rating.textContent = `Rating: ${product.rating} / 5 Stars`;
+        const ratingStars = Math.floor(product.rating);
+
+        let stars = "";
+
+        for (let i=0; i < ratingStars; i++) {
+            stars += "⭐"
+        }
+
+        rating.textContent = `${stars} (${product.rating} Stars)`;
 
         //item price 
         const price = document.createElement("p");
@@ -308,9 +328,15 @@ function displayIndividualProduct(product) {
         const sku = document.createElement("p");
         sku.textContent = `SKU: ${product.sku}`;
 
-        //item tags
-        const tags = document.createElement("p");
-        tags.textContent = `Tags: ${product.tags}`;
+        //item tags - display tags as pills instead of text
+        const tags = document.createElement("div");
+        for (const tag of product.tags) {
+            const tagPill = document.createElement("span");
+
+            tagPill.textContent = tag;
+            tagPill.classList.add("tag_pill");
+            tags.appendChild(tagPill);
+        }
 
         //item stock
         const stock = document.createElement("p")
@@ -406,9 +432,15 @@ function displayIndividualProduct(product) {
             // Name
             const reviewerName = document.createElement("p");
             reviewerName.textContent = review.reviewerName
+
             // Rating
             const reviewerRating = document.createElement("p");
-            reviewerRating.textContent = `Rating: ${review.rating} / 5`;
+            let reviewStars = "";
+            for (let i=0; i < review.rating; i++) {
+                reviewStars += "⭐";
+            }
+            reviewerRating.textContent = reviewStars;
+
             // Comments
             const reviewerComment = document.createElement("p");
             reviewerComment.textContent = review.comment;
@@ -661,6 +693,17 @@ function addToCart(product, quantity) { //this function and displayCart are base
             existingItem = item;
         }
     }
+    
+    let currentQuantity = 0;
+        if (existingItem) {
+        currentQuantity = existingItem.quantity
+        }
+
+    if (currentQuantity + quantity > product.stock) {
+        alert(`Only ${product.stock} available in stock`);
+
+        return;
+    }
 
     if (existingItem) {
         existingItem.quantity += quantity;
@@ -669,9 +712,12 @@ function addToCart(product, quantity) { //this function and displayCart are base
         
         cart.push(newItem);
     }
+
     updateStorage();
     updateCartBadge();
     displayCart();
+
+    showToaster(`${quantity} ${product.title} added to cart`);
 }
 
 //in charge of displaying the shopping cart and also does the money math
@@ -822,6 +868,12 @@ function calculateTax(merchandiseTotal, shippingCost) {
 
 //checkout time clears the cart, updates storage, and returns you to the home page
 function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty. Please add items before checking out.");
+
+        return;
+    }
+
     alert("Checkout complete. Purchase successful!")
 
     cart =[];

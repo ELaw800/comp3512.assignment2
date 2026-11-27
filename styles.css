@@ -95,3 +95,11 @@ body {
 #about_close_x {
     float: right;
 }
+
+/* individual item tags */
+.tag_pill {
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 4px 8px;
+    margin-right: 5px;
+}
