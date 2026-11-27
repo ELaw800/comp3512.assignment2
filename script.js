@@ -544,12 +544,10 @@ function displayProducts(products) {
 
 //builds the category checkboxes and their labels
 function displayCategories() {
-    const categories = [];
-
-    for( const product of products) {
-        if (!categories.includes(product.category)) {
-            categories.push(product.category);
-        }
+    
+    const categories = new Set();
+    for (const product of products) {
+        categories.add(product.category);
     }
     // console.log("categories running");
     // console.log(products.length);

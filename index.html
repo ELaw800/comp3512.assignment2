@@ -49,20 +49,27 @@ Assignment 2
             <h2>Browse</h2>
 
                 <section id="filters">
+                    <h3>Departments</h5>
 
                     <!--NAME FILTER-->
-                    <label for="name_filter">
-                        Name
-                    </label>
+                    <details>
+                        <summary>Name</summary>
 
-                    <input type="text" id="name_filter" placeholder="Search">
+                        <input type="text" id="name_filter" placeholder="Search">
+                    </details>
+                    
 
                     <!--CATEGORY FILTER-->
-                    <section id="category_filter">
-                        <h3>Category</h3>
-                    </section>
+                    <details>
+                        <summary>Categories</summary>
+                        <section id="category_filter"></section>
+                    </details>
+
 
                     <!--RATING FILTER-->
+                    <details>
+                        <summary>Rating</summary>
+
                     <select id="rating_filter">
                         <option value="0">Any Rating</option>
                         <option value="1">1 Star</option>
@@ -70,8 +77,13 @@ Assignment 2
                         <option value="3">3 Stars</option>
                         <option value="4">4 Stars</option>
                     </select>
+                    </details>
+
 
                     <!--PRICE FILTER-->
+                    <details>
+                        <summary>Price</summary>
+
                     <select id="price_filter">
                         <option value="0">Any Price</option>
                         <option value="10">Under $10</option>
@@ -80,6 +92,8 @@ Assignment 2
                         <option value="250">Under $250</option>
                         <option value="1000">Under $1000</option>
                     </select>
+                    </details>
+
 
                     <!--SORTING-->
                     <label>
@@ -180,7 +194,7 @@ Assignment 2
     <script type="module" src="script.js"></script>
 
     <div id="toaster" class="hidden">
-        
+
     </div>
 
 </body>
