@@ -293,6 +293,27 @@ function displayIndividualProduct(product) {
             addToCart(product, quantity);
         });
 
+        //SEPARATE BOX START**************
+        const tabBox = document.createElement("div");
+        const specificationsButton = document.createElement("button");
+        const reviewsButton = document.createElement("button");
+
+        specificationsButton.textContent = "Specifications";
+        reviewsButton.textContent = "Reviews";
+
+        tabBox.appendChild(specificationsButton);
+        tabBox.appendChild(reviewsButton);
+
+        specificationsButton.addEventListener("click", () => {
+            specifications.classList.remove("hidden");
+            reviewSection.classList.add("hidden");
+        });
+
+        reviewsButton.addEventListener("click", () => {
+            reviewSection.classList.remove("hidden");
+            specifications.classList.add("hidden");
+        })
+
 
         //SPECIFICATIONS SECTION
         const specifications = document.createElement("section");
@@ -330,6 +351,7 @@ function displayIndividualProduct(product) {
 
         //REVIEWS SECTION
         const reviewSection = document.createElement("section");
+        reviewSection.classList.add("hidden", "review_section");
 
         const reviewHeading = document.createElement("h3");
         reviewHeading.textContent = "Reviews";
@@ -337,6 +359,7 @@ function displayIndividualProduct(product) {
 
         for (const review of product.reviews) {
             const reviewBlock = document.createElement("div");
+            reviewBlock.classList.add("review_block");
 
             // Name
             const reviewerName = document.createElement("p");
@@ -361,7 +384,7 @@ function displayIndividualProduct(product) {
         }
 
 
-        //display order
+        //display order: 1.product --> info 2.specs+reviews --> 3.add to cart
         singleProductContainer.appendChild(image);
         singleProductContainer.appendChild(title);
         singleProductContainer.appendChild(price);
@@ -370,8 +393,11 @@ function displayIndividualProduct(product) {
         singleProductContainer.appendChild(tags);
         singleProductContainer.appendChild(stock);
         singleProductContainer.appendChild(description);
+
+        singleProductContainer.appendChild(tabBox);
         singleProductContainer.appendChild(specifications);
         singleProductContainer.appendChild(reviewSection);
+
         singleProductContainer.appendChild(quantityInput);
         singleProductContainer.appendChild(addToCartButton);
 

@@ -71,3 +71,14 @@ body {
     width: 100px;
 }
 
+/* review section outline */
+.review_block {
+    border-bottom: 1px solid gray;
+    padding: 10px;
+}
+
+/* single product style */
+.review_section {
+    max-height: 300px;
+    overflow-y: auto;
+}
