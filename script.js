@@ -265,11 +265,9 @@ function displayFeaturedProducts() {
 
 //************** Individual Product ******************************************************************************************
 
-// creates the individual view for a single product
-function displayIndividualProduct(product) {
-
-        // BREADCRUMB NAVIGATION
-        const breadcrumb = document.querySelector("#breadcrumb");
+// BREADCRUMB NAVIGATION
+function createBreadcrumb(product) {
+            const breadcrumb = document.querySelector("#breadcrumb");
         breadcrumb.replaceChildren();
 
         const homeCrumb = document.createElement("a")
@@ -303,203 +301,213 @@ function displayIndividualProduct(product) {
         breadcrumb.appendChild(categoryCrumb);
         breadcrumb.append("  >  ");
         breadcrumb.appendChild(nameCrumb);
+}
+// PRODUCT INFORMATION
+function createProductHeader(product) {
+    const productHeader = document.createElement("div");
+    productHeader.classList.add("product_header");
+        
+    const productInfo = document.createElement("div");
+    productInfo.classList.add("product_info");
 
+    //item title
+    const title = document.createElement("h2");
+    title.textContent = product.title;
 
-        //PRODUCT INFORMATION
-        singleProductContainer.replaceChildren();
-        showProductView();
+    //item price 
+    const price = document.createElement("p");
+    price.textContent = `$${product.price}`;
+    price.classList.add("product_price");
 
-        //item title
-        const title = document.createElement("h2");
-        title.textContent = product.title;
+    //item rating
+    const rating = document.createElement("p");
+    const ratingStars = Math.floor(product.rating);
 
-        //item rating
-        const rating = document.createElement("p");
-        const ratingStars = Math.floor(product.rating);
+    let stars = "";
 
-        let stars = "";
-
-        for (let i=0; i < ratingStars; i++) {
+    for (let i=0; i < ratingStars; i++) {
             stars += "⭐"
+    }
+
+    rating.textContent = `${stars} (${product.rating} Stars)`;
+
+    //image
+    const image = document.createElement("img");
+    image.src = product.thumbnail;
+    image.classList.add("product_image");
+
+    //item description
+    const description = document.createElement("p");
+    description.textContent = product.description;
+
+    //tags
+    const tags = createTagContainer(product.tags);
+
+    // item sku
+    const sku = document.createElement("p");
+    sku.textContent = `SKU: ${product.sku}`;
+
+    //item stock
+    const stock = document.createElement("p")
+    if (product.stock > 0) {
+        stock.textContent = `${product.availabilityStatus}: (${product.stock} available)`;
+    } else {
+        stock.textContent = "Out of Stock";
+    }; 
+
+    //item quantity
+    const quantityInput = document.createElement("input");
+    quantityInput.type = "number";
+    quantityInput.value = 1;
+    quantityInput.min = 1;
+
+    //add to cart button
+    const addToCartButton = document.createElement("button");
+    addToCartButton.textContent = "Add to Cart";
+
+    addToCartButton.addEventListener("click", () => {
+        const quantity= Number(quantityInput.value);
+        addToCart(product, quantity);
+    });
+
+    productInfo.append(title, price, rating, sku, tags, stock,
+        description, quantityInput, addToCartButton);
+    
+    productHeader.append(image, productInfo);
+
+    return productHeader;
+
+}
+// PRODUCT TAGS
+function createTagContainer(tagsArray) {
+    //item tags - display tags as pills instead of text
+    const tags = document.createElement("div");
+    
+    for (const tag of tagsArray) {
+        const tagPill = document.createElement("span");
+
+        tagPill.textContent = tag;
+        tagPill.classList.add("tag_pill");
+        tags.appendChild(tagPill);
+    }
+
+    return tags;
+}
+// PRODUCT SPECIFICATIONS
+function createSpecificationsSection(product) {
+    //SPECIFICATIONS SECTION
+    const specifications = document.createElement("section");
+    const specificationsHeading = document.createElement("h3");
+
+    specificationsHeading.textContent = "Specifications"
+
+    //item weight
+    const weight = document.createElement("p");
+    weight.textContent = `Weight: ${product.weight} mystery units`;
+
+    //item dimensions
+    const dimensions = document.createElement("p");
+    dimensions.textContent = `Dimensions: ${product.dimensions.width}" x ${product.dimensions.height}"
+    x ${product.dimensions.depth}"`;
+
+    //item warranty
+    const warranty = document.createElement("p");
+    warranty.textContent = `Warranty: ${product.warrantyInformation}`;
+
+    //item shipping information
+    const shippingInfo = document.createElement("p");
+    shippingInfo.textContent = `${product.shippingInformation}!`;
+
+    //item return policy
+    const returnPolicy = document.createElement("p");
+    returnPolicy.textContent = `${product.returnPolicy}`;
+
+    specifications.append(specificationsHeading, weight, dimensions, warranty,
+        shippingInfo, returnPolicy);
+
+    return specifications;
+}
+// PRODUCT REVIEWS
+function createReviewSection(product) {
+    //REVIEWS SECTION
+    const reviewSection = document.createElement("section");
+    reviewSection.classList.add("hidden", "review_section");
+
+    const reviewHeading = document.createElement("h3");
+    reviewHeading.textContent = "Reviews";
+    reviewSection.appendChild(reviewHeading);
+
+    for (const review of product.reviews) {
+        const reviewBlock = document.createElement("div");
+        reviewBlock.classList.add("review_block");
+
+        // Name
+        const reviewerName = document.createElement("p");
+        reviewerName.textContent = review.reviewerName
+
+        // Rating
+        const reviewerRating = document.createElement("p");
+        let reviewStars = "";
+        for (let i=0; i < review.rating; i++) {
+            reviewStars += "⭐";
         }
+        reviewerRating.textContent = reviewStars;
 
-        rating.textContent = `${stars} (${product.rating} Stars)`;
+        // Comments
+        const reviewerComment = document.createElement("p");
+        reviewerComment.textContent = review.comment;
+        // Date 
+        const reviewDate = document.createElement("p");
+        const date = new Date(review.date); //changes to a readable format
+        reviewDate.textContent = date.toLocaleDateString();
 
-        //item price 
-        const price = document.createElement("p");
-        price.textContent = `$${product.price}`;
+        reviewBlock.append(reviewerName, reviewerRating, reviewerComment, reviewDate);
 
-        //image
-        const image = document.createElement("img");
-        image.src = product.thumbnail;
-        image.classList.add("product_image")
+        reviewSection.appendChild(reviewBlock);
+    }
 
-        //item description
-        const description = document.createElement("p");
-        description.textContent = product.description;
+    return reviewSection;
+}
+// BOX FOR SPECIFICATIONS & REVIEWS
+function createTabBox(specifications, reviews) {
+//SEPARATE BOX START**************
+    const tabBox = document.createElement("div");
+    tabBox.classList.add("tab_box");
+    const specificationsButton = document.createElement("button");
+    const reviewsButton = document.createElement("button");
 
-        // item sku
-        const sku = document.createElement("p");
-        sku.textContent = `SKU: ${product.sku}`;
+    specificationsButton.textContent = "Specifications";
+    reviewsButton.textContent = "Reviews";
 
-        //item tags - display tags as pills instead of text
-        const tags = document.createElement("div");
-        for (const tag of product.tags) {
-            const tagPill = document.createElement("span");
+    specificationsButton.addEventListener("click", () => {
+        specifications.classList.remove("hidden");
+        reviews.classList.add("hidden");
+    });
 
-            tagPill.textContent = tag;
-            tagPill.classList.add("tag_pill");
-            tags.appendChild(tagPill);
-        }
+    reviewsButton.addEventListener("click", () => {
+        reviews.classList.remove("hidden");
+        specifications.classList.add("hidden");
+    });
 
-        //item stock
-        const stock = document.createElement("p")
-        if (product.stock > 0) {
-            stock.textContent = `${product.availabilityStatus}: (${product.stock} available)`;
-        } else {
-            stock.textContent = "Out of Stock";
-        }; 
+    tabBox.append(specificationsButton, reviewsButton);
 
-        //item quantity
-        const quantityInput = document.createElement("input");
-        quantityInput.type = "number";
-        quantityInput.value = 1;
-        quantityInput.min = 1;
+    return tabBox;
+}
 
-        //add to cart button
-        const addToCartButton = document.createElement("button");
-        addToCartButton.textContent = "Add to Cart";
+// Uses all of the create functions to build a single individual product display
+function displayIndividualProduct(product) {
 
-        addToCartButton.addEventListener("click", () => {
-            const quantity= Number(quantityInput.value);
-            addToCart(product, quantity);
-        });
+    createBreadcrumb(product);
+    
+    singleProductContainer.replaceChildren();
+    showProductView();
 
-        price.classList.add("product_price");
-        
-        const productHeader = document.createElement("div");
-        productHeader.classList.add("product_header");
-        
-        const productInfo = document.createElement("div");
-        productInfo.classList.add("product_info");
+    const productHeader = createProductHeader(product);
+    const specifications = createSpecificationsSection(product);
+    const reviews = createReviewSection(product);
+    const tabBox = createTabBox(specifications, reviews);
 
-        productInfo.appendChild(title);
-        productInfo.appendChild(price);
-        productInfo.appendChild(rating);
-        productInfo.appendChild(sku);
-        productInfo.appendChild(tags);
-        productInfo.appendChild(stock);
-        productInfo.appendChild(description);
-        productInfo.appendChild(quantityInput);
-        productInfo.appendChild(addToCartButton);
-
-        productHeader.appendChild(image);
-        productHeader.appendChild(productInfo);
-
-        //SEPARATE BOX START**************
-        const tabBox = document.createElement("div");
-        tabBox.classList.add("tab_box");
-        const specificationsButton = document.createElement("button");
-        const reviewsButton = document.createElement("button");
-
-        specificationsButton.textContent = "Specifications";
-        reviewsButton.textContent = "Reviews";
-
-        tabBox.appendChild(specificationsButton);
-        tabBox.appendChild(reviewsButton);
-
-        specificationsButton.addEventListener("click", () => {
-            specifications.classList.remove("hidden");
-            reviewSection.classList.add("hidden");
-        });
-
-        reviewsButton.addEventListener("click", () => {
-            reviewSection.classList.remove("hidden");
-            specifications.classList.add("hidden");
-        })
-
-
-        //SPECIFICATIONS SECTION
-        const specifications = document.createElement("section");
-        const specificationsHeading = document.createElement("h3");
-
-        specificationsHeading.textContent = "Specifications"
-
-        //item weight
-        const weight = document.createElement("p");
-        weight.textContent = `Weight: ${product.weight} mystery units`;
-
-        //item dimensions
-        const dimensions = document.createElement("p");
-        dimensions.textContent = `Dimensions: ${product.dimensions.width}" x ${product.dimensions.height}"
-        x ${product.dimensions.depth}"`;
-
-        //item warranty
-        const warranty = document.createElement("p");
-        warranty.textContent = `Warranty: ${product.warrantyInformation}`;
-
-        //item shipping information
-        const shippingInfo = document.createElement("p");
-        shippingInfo.textContent = `${product.shippingInformation}!`;
-
-        //item return policy
-        const returnPolicy = document.createElement("p");
-        returnPolicy.textContent = `${product.returnPolicy}`;
-
-        specifications.appendChild(specificationsHeading);
-        specifications.appendChild(weight);
-        specifications.appendChild(dimensions);
-        specifications.appendChild(warranty);
-        specifications.appendChild(shippingInfo);
-        specifications.appendChild(returnPolicy);
-
-        //REVIEWS SECTION
-        const reviewSection = document.createElement("section");
-        reviewSection.classList.add("hidden", "review_section");
-
-        const reviewHeading = document.createElement("h3");
-        reviewHeading.textContent = "Reviews";
-        reviewSection.appendChild(reviewHeading);
-
-        for (const review of product.reviews) {
-            const reviewBlock = document.createElement("div");
-            reviewBlock.classList.add("review_block");
-
-            // Name
-            const reviewerName = document.createElement("p");
-            reviewerName.textContent = review.reviewerName
-
-            // Rating
-            const reviewerRating = document.createElement("p");
-            let reviewStars = "";
-            for (let i=0; i < review.rating; i++) {
-                reviewStars += "⭐";
-            }
-            reviewerRating.textContent = reviewStars;
-
-            // Comments
-            const reviewerComment = document.createElement("p");
-            reviewerComment.textContent = review.comment;
-            // Date 
-            const reviewDate = document.createElement("p");
-            const date = new Date(review.date); //changes to a readable format
-            reviewDate.textContent = date.toLocaleDateString();
-
-            reviewBlock.appendChild(reviewerName);
-            reviewBlock.appendChild(reviewerRating);
-            reviewBlock.appendChild(reviewerComment);
-            reviewBlock.appendChild(reviewDate);
-
-            reviewSection.appendChild(reviewBlock);
-        }
-
-
-        //display order: 1.product --> info 2.specs+reviews --> 3.add to cart
-        singleProductContainer.appendChild(productHeader);
-
-        singleProductContainer.appendChild(tabBox);
-        singleProductContainer.appendChild(specifications);
-        singleProductContainer.appendChild(reviewSection);
+    singleProductContainer.append(productHeader, tabBox, specifications, reviews);
 
 }
 
