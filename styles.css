@@ -219,6 +219,18 @@ summary {
     box-shadow: 0 4px 12px black;
 }
 
+.no_products_message {
+    grid-column: 1 / -1;
+    font-family: "Cinzel", serif;
+    text-align: center;
+    padding: 40px;
+    background-color: #f5ecd8;
+    border: 3px solid #6b4423;
+    color: #1b1409;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
 /* ***** Product Cards ****** */
 /* Image thumbnails */
 .product-card img {

@@ -224,10 +224,12 @@ aboutX.addEventListener("click", () => {
 //*******shipping *****************
 
 shippingMethod.addEventListener("change", () => {
+    console.log("shipping method changed");
     displayCart();
 });
 
 shippingDestination.addEventListener("change", () => {
+    console.log("Shippping destination changed");
     displayCart();
 });
 
@@ -570,7 +572,7 @@ function displayProducts(products) {
     if (products.length === 0) {
         const message = document.createElement("p");
         message.textContent = "No products match your current filters."
-
+        message.classList.add("no_products_message");
         container.appendChild(message);
 
         return;
