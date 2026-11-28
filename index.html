@@ -11,6 +11,15 @@ Assignment 2
     <title>COMP 3512 Assignment 2</title>
 
     <link rel="stylesheet" href="styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -20,10 +29,14 @@ Assignment 2
             https://pixabay.com/vectors/animal-dragon-myth-mythical-1297852/
         -->
 
-        <h1>COMP 3512 Assignment 2</h1>
+        <div>
+            <h1>Dragonscale Market</h1>
+            <p>The #1 Marketplace in the Realm</p>
+        </div>
+
 
         <!--Cart button-->
-        <button id="cart_button">CART</button>
+        <button id="cart_button"></button>
     </header>
 
     <nav>
@@ -41,25 +54,29 @@ Assignment 2
     <main>
         <!--View #1 Home-->
         <article id="home_view" class="hidden"> 
-            <h2>Welcome to the COMP 3512-A2 Shop</h2>
-            <p>Here you can find many products to view and purchse.</p>
+            <section id="hero">
+                <h2>Welcome to the Dragonscale Market</h2>
+                <p>Rare trinkets, enchanted goods, and magical artifacts gathered from
+                    every corner of the realm.
+                </p>
+            </section>
 
-            <h3>Featured Products</h3>
+            <h3>Featured Artifacts</h3>
             <section id="featured_products"></section>
         </article>
 
         <!--View #2 Browse-->
         <article id="browse_view" class="hidden"> 
-            <h2>Browse</h2>
+            <h2>Browse the Market</h2>
 
             <section id="browse_layout">
 
                 <section id="filters">
-                    <h3>Departments</h3>
+                    <h3>Merchant Registry</h3>
 
                     <!--NAME FILTER-->
                     <details>
-                        <summary>Name</summary>
+                        <summary>Search Wares</summary>
 
                         <input type="text" id="name_filter" placeholder="Search">
                     </details>
@@ -74,7 +91,7 @@ Assignment 2
 
                     <!--RATING FILTER-->
                     <details>
-                        <summary>Rating</summary>
+                        <summary>Item Quality</summary>
 
                     <select id="rating_filter">
                         <option value="0">Any Rating</option>
@@ -88,7 +105,7 @@ Assignment 2
 
                     <!--PRICE FILTER-->
                     <details>
-                        <summary>Price</summary>
+                        <summary>Price Range</summary>
 
                     <select id="price_filter">
                         <option value="0">Any Price</option>
@@ -136,22 +153,24 @@ Assignment 2
         <article id="cart_view" class="hidden">
             <h2>Cart</h2>
 
-            <section id="cart_container"></section>
+            <section id="cart_layout">
+                <section id="cart_container"></section>
 
-            <section id="cart_summary">
-                <p id="cart_count">Items: 0</p> 
+                <section id="cart_summary">
+                    <p id="cart_count">Items: 0</p> 
 
-                <p id="merchandise_total">Merchandise: $0.00</p>
+                    <p id="merchandise_total">Merchandise: $0.00</p>
 
-                <p id="shipping_total">Shipping: $0.00</p>
+                    <p id="shipping_total">Shipping: $0.00</p>
 
-                <p id="tax_total">Tax: $0.00</p>
+                    <p id="tax_total">Tax: $0.00</p>
 
-                <p id="cart_total">Total: $0.00</p>
+                    <p id="cart_total">Total: $0.00</p>
+                </section>
             </section>
 
             <button id="checkout_button">
-                Checkout
+                Purchase Wares
             </button>
 
             <section id="shipping_section">
@@ -179,16 +198,43 @@ Assignment 2
 
         </article>
 
-        <dialog id="about_popup"> <!--View #5 About-->
-            <h2>About this page</h2>
-            <section>
-                <h3>Stuff</h3>
-                <p>more stuff</p>
-            </section>
+         <!--View #5 About-->
+        <dialog id="about_popup">
 
             <button id="close_about_x">
                 X
             </button>
+
+            <h2>About Dragonscale Market</h2>
+            <section>
+                <h3>COMP 3512 Assignment 2</h3>
+                <p>
+                    This website was developed for one of the main assignments in COMP 3512 at MRU.  
+                </p>
+
+                <p>
+                    This market serves as a way to connect adventurers with merchants from all across the realm.
+                    You can browse exotic wares, purchase treasures, and fill your bag before beginning your next
+                    quest. 
+                </p>
+
+                <p>
+                    Page Author: Ethan Law
+                    <ul>
+                        <li><a href="https://github.com/ELaw800" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+                        <li><a href="https://www.linkedin.com/in/ethan-law-7a3070387/" target="_blank" rel="noopener noreferrer">Linkedin</a></li>
+                        <li><a href="https://github.com/ELaw800/comp3512.assignment2" target="_blank" rel="noopener noreferrer">Project Repo</a></li>
+                    </ul>
+                    
+                </p>
+
+                <p>
+                    All of the products found on this page are retrieved from the DummyJSON API. Users are able
+                    to browse, filter, sort, and purchase products. 
+                </p>
+            </section>
+
+
 
             <button id="close_about">
                 Close
@@ -199,7 +245,15 @@ Assignment 2
 
     </main>
     
-    <footer>COMP 3512 Assignment 2</footer>
+    <footer>
+        <p>
+            Dragonscale Market 2026 | The #1 marketplace in the realm <br>
+            COMP 3512 Assignment 2 | Ethan Law
+        <p><a href="https://github.com/ELaw800" target="_blank" rel="noopener noreferrer">GitHub</a></p>
+        <p><a href="https://github.com/ELaw800/comp3512.assignment2" target="_blank" rel="noopener noreferrer">Project Repo</a></p>
+                    
+        <p>
+    </footer>
 
     <script type="module" src="script.js"></script>
 

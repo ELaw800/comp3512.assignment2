@@ -478,15 +478,22 @@ function createTabBox(specifications, reviews) {
 
     specificationsButton.textContent = "Specifications";
     reviewsButton.textContent = "Reviews";
+    specificationsButton.classList.add("active_tab");
 
     specificationsButton.addEventListener("click", () => {
         specifications.classList.remove("hidden");
         reviews.classList.add("hidden");
+
+        specificationsButton.classList.add("active_tab");
+        reviewsButton.classList.remove("active_tab")
     });
 
     reviewsButton.addEventListener("click", () => {
         reviews.classList.remove("hidden");
         specifications.classList.add("hidden");
+
+        reviewsButton.classList.add("active_tab");
+        specificationsButton.classList.remove("active_tab");
     });
 
     tabBox.append(specificationsButton, reviewsButton);
@@ -712,7 +719,7 @@ function updateCartBadge() {
         totalItems += item.quantity;
     }
 
-    cartButton.textContent = `CART (${totalItems})`;
+    cartButton.textContent = `🧺 CART (${totalItems})`;
 }
 //************* cart page **********************************************************************************************
 
@@ -756,6 +763,24 @@ function addToCart(product, quantity) { //this function and displayCart are base
 function displayCart() {
     cartContainer.replaceChildren();
 
+    if (cart.length === 0) {
+        const message = document.createElement("p");
+        message.classList.add("empty_cart_message")
+        message.textContent = "Your cart is currently empty";
+
+        cartContainer.appendChild(message);
+        checkoutButton.disabled = true;
+        shippingMethod.disabled = true;
+        shippingDestination.disabled = true;
+    } else {
+        checkoutButton.disabled = false;
+        shippingMethod.disabled = false;
+        shippingDestination.disabled = false;
+    }
+
+
+
+
     let totalItems = 0;
     let totalPrice = 0;
 
@@ -798,12 +823,8 @@ function displayCart() {
         quantitySection.appendChild(quantity);
         subtotalSection.appendChild(subtotal);
 
-        cartItem.appendChild(deleteButton);
-        cartItem.appendChild(imageSection);
-        cartItem.appendChild(titleSection);
-        cartItem.appendChild(priceSection);
-        cartItem.appendChild(quantitySection);
-        cartItem.appendChild(subtotalSection);
+        cartItem.append(deleteButton, imageSection, titleSection,
+            priceSection, quantitySection, subtotalSection);
 
         imageSection.classList.add("cart_image");
         titleSection.classList.add("cart_title");
@@ -909,6 +930,8 @@ function checkout() {
     alert("Checkout complete. Purchase successful!")
 
     cart =[];
+    shippingMethod.value = "none";
+    shippingDestination.value = "canada";
 
     updateStorage();
     displayCart();
