@@ -1,6 +1,7 @@
 /*
 COMP 3512
 Assignment 2
+Ethan Law
 */
 
 //data arrays
@@ -725,6 +726,11 @@ function updateCartBadge() {
 
 //adds a product to the cart and if the item is a duplicate, increase the quantity
 function addToCart(product, quantity) { //this function and displayCart are based on the code from labs
+    if (quantity <= 0) {
+        showToaster("You must add at least 1 item to your cart.")
+        return;
+    }
+    
     let existingItem = null;
 
     for (const item of cart) {
@@ -778,9 +784,6 @@ function displayCart() {
         shippingDestination.disabled = false;
     }
 
-
-
-
     let totalItems = 0;
     let totalPrice = 0;
 
@@ -815,7 +818,13 @@ function displayCart() {
         deleteButton.textContent = "DELETE"
         deleteButton.dataset.id = item.product.id;
 
+        // Decrease button
+        const decreaseButton = document.createElement("button");
+        decreaseButton.textContent = "-1";
+        decreaseButton.dataset.id = item.product.id;
+
         deleteButton.addEventListener("click", deleteCartItem);
+        decreaseButton.addEventListener("click", decreaseQuantity);
 
         imageSection.appendChild(image);
         titleSection.appendChild(title);
@@ -823,7 +832,7 @@ function displayCart() {
         quantitySection.appendChild(quantity);
         subtotalSection.appendChild(subtotal);
 
-        cartItem.append(deleteButton, imageSection, titleSection,
+        cartItem.append(deleteButton, decreaseButton, imageSection, titleSection,
             priceSection, quantitySection, subtotalSection);
 
         imageSection.classList.add("cart_image");
@@ -855,6 +864,26 @@ function deleteCartItem(e) {
     const id = Number(e.currentTarget.dataset.id);
 
     cart = cart.filter(item => item.product.id !== id);
+
+    updateStorage();
+    updateCartBadge();
+    displayCart();
+}
+
+//reduces the quanity of an item in the cart by 1
+function decreaseQuantity(e) {
+    const id = Number(e.currentTarget.dataset.id);
+
+    for (const item of cart) {
+        if (item.product.id === id) {
+            item.quantity--;
+
+            if (item.quantity <= 0) {
+                cart = cart.filter(cartItem => cartItem.product.id !== id);
+            }
+            break;
+        }
+    }
 
     updateStorage();
     updateCartBadge();
@@ -938,11 +967,6 @@ function checkout() {
     updateCartBadge();
     showHomeView();
 }
-
-
-
-
-
 
 
 
