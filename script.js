@@ -224,12 +224,10 @@ aboutX.addEventListener("click", () => {
 //*******shipping *****************
 
 shippingMethod.addEventListener("change", () => {
-    console.log("shipping method changed");
     displayCart();
 });
 
 shippingDestination.addEventListener("change", () => {
-    console.log("Shippping destination changed");
     displayCart();
 });
 
